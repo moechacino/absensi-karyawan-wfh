@@ -5,13 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "npm run typecheck && vite build",
+    "typecheck": "tsc -b",
+    "lint": "eslint . --max-warnings=0",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "axios": "1.21.0",
+    "@tanstack/react-query": "5.107.1",
+    "react-router": "7.18.5",
+    "react-hook-form": "7.91.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -23,8 +30,19 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.13.0",
-    "typescript": "~6.0.3",
+    "typescript": "~5.9.3",
     "typescript-eslint": "^8.72.1",
-    "vite": "^8.3.6"
+    "vite": "^8.3.6",
+    "tailwindcss": "4.3.5",
+    "@tailwindcss/vite": "4.3.5",
+    "openapi-typescript": "7.13.0",
+    "vitest": "5.1.0",
+    "jsdom": "28.1.0",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "7.0.1"
+  },
+  "engines": {
+    "node": "^22.18.0 || ^24.0.0"
   }
 }
