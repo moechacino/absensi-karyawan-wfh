@@ -17,8 +17,9 @@ npm run dev
 ```
 
 Vite normally serves http://localhost:5173; use the address printed by the server.
-The current page is a minimal application entry. Authentication, API operations,
-Figma assets, and the design theme are implemented by subsequent tasks.
+The current page is a minimal application entry using local Figma branding,
+Manrope, and the design theme. Authentication and API operations belong to
+subsequent tasks.
 
 ## Public configuration and local proxy
 
@@ -65,7 +66,8 @@ src/
   features/      # product capabilities, introduced by their own task
   shared/        # reusable configuration, API, UI, and domain-free utilities
     config/      # pure public-config parser and validated application values
-  styles/        # Tailwind import; Figma theme/font setup follows in WEB-002
+  assets/        # local Figma SVGs, licensed WOFF2 fonts, and source manifest
+  styles/        # Tailwind theme variables, font faces, and base typography
   test/          # shared unit-test setup
 ```
 
@@ -91,3 +93,16 @@ peer requirement; the starter's TypeScript 6 range was incompatible with that
 requirement. Router 7.18.5 and jsdom 28.1.0 support the baseline Node runtime.
 Vitest 5.1.0 supports Vite 8. OpenAPI generation, request clients, query policies,
 protected routes, and authentication are intentionally owned by later tasks.
+
+## Design assets and theme
+
+The [asset guide](src/assets/README.md) and
+[source manifest](src/assets/asset-manifest.json) document 28 exported Figma
+icons, the mark/wordmark, licensed fonts, source nodes, transformations, and
+checksums. All 33 live variables match the shared design tokens. The Tailwind
+theme provides semantic colors, a 4 px spacing base, 8/12/20 px radii, 48 px
+touch-size utilities, 140/90 ms motion, and inspected typography sizes.
+
+Fonts are self-hosted; runtime rendering makes no Figma/Google Fonts request.
+The illustrative evidence photo stays outside production assets. Accessible
+shared components and their interactions belong to WEB-003.

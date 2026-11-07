@@ -1,0 +1,737 @@
+{
+  "schemaVersion": 1,
+  "verifiedOn": "2026-11-07",
+  "figma": {
+    "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+    "fileName": "absabsensi-karyawan",
+    "inspectedRestVersion": "2418955315173304006",
+    "exportMethod": "Read-only Desktop Bridge; no Figma nodes were created, edited, or deleted.",
+    "iconInstanceCount": 1517,
+    "uniqueIconCount": 28
+  },
+  "assets": [
+    {
+      "file": "icons/check.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:75",
+        "nodeName": "Icon / check",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-75"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "93d1462a6a32168b20c14d3940c8bf1f1e2dc683572bd88d0a60156dddecdf6b",
+      "sha256": "ca5480d71e10a7e7ff76e35d0304ea74de7c098fe1d2d9b5a180d475a83badfb"
+    },
+    {
+      "file": "icons/down.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:194",
+        "nodeName": "Icon / down",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-194"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "683d385d002407fb7e732e44ea22d168d3456bd30f5662597c3877f8ce861b89",
+      "sha256": "d42ea3882a3c7fac258bd67336e1807332534928b80d5dd78673ccfb24e7f521"
+    },
+    {
+      "file": "icons/camera.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:2269",
+        "nodeName": "Icon / camera",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-2269"
+      },
+      "viewBox": "0 0 28 28",
+      "width": 28,
+      "height": 28,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "751fe41d7e933623ba009b54eb633682c27bd2504ec6997f58f783c3fdbe70a1",
+      "sha256": "0f5e83bda6aa54204507d54d3282f0096201da40b2e908beac108fe72eb5255a"
+    },
+    {
+      "file": "icons/refresh.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:2277",
+        "nodeName": "Icon / refresh",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-2277"
+      },
+      "viewBox": "0 0 28 28",
+      "width": 28,
+      "height": 28,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "e1981a239e86edffaf69037db15c930c8c984d6d97924bc9bd456f0db77ab11f",
+      "sha256": "6abdee6c8cc811251da336a802ac6accd4179d7261c9d6d88cdaf99de47af21e"
+    },
+    {
+      "file": "icons/search.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:2285",
+        "nodeName": "Icon / search",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-2285"
+      },
+      "viewBox": "0 0 28 28",
+      "width": 28,
+      "height": 28,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "e6cc3bfbc4c93f14ef550e9fdf24a4b8c7177d481a601c0ca582b0f23002ffa5",
+      "sha256": "bf2c15053f40b0f863af4549f19f40e4cceecfae66cd6c605fb701bf90cfb4cf"
+    },
+    {
+      "file": "icons/offline.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:2293",
+        "nodeName": "Icon / offline",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-2293"
+      },
+      "viewBox": "0 0 28 28",
+      "width": 28,
+      "height": 28,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "f22a448c3e1991aaabda02cdb74904412094d49b792e247852058fdb1203b29d",
+      "sha256": "248f676d850f2ce9b86b0b9f530af4ce8e5de80c22c19e624f248408da2a954e"
+    },
+    {
+      "file": "icons/info.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "5:13657",
+        "nodeName": "Icon / info",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=5-13657"
+      },
+      "viewBox": "0 0 24 24",
+      "width": 24,
+      "height": 24,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "abcc4f6c59e3a42c48fc74cdf447af5b5988d94a746be51adf8c53ea87a0c440",
+      "sha256": "3b1b93cad39146abc30cd1882eafe036ccb7a5be925af4e0cbba1b4c8e176e27"
+    },
+    {
+      "file": "icons/upload.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "12:1587",
+        "nodeName": "Icon / upload",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=12-1587"
+      },
+      "viewBox": "0 0 22 22",
+      "width": 22,
+      "height": 22,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "2b68ae37863cb623e7f809e8ab1988010c93123821deb7ad1d88d3328b1d1920",
+      "sha256": "2d70825a75c2dde5983be42c79e634cb10b66ea97d1b95dc0ca6e3db53ff1947"
+    },
+    {
+      "file": "icons/file.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "12:1594",
+        "nodeName": "Icon / file",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=12-1594"
+      },
+      "viewBox": "0 0 24 24",
+      "width": 24,
+      "height": 24,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "6c213d9c60543f20f68139f63f10498092af905d5741cb5310e069b4481441c9",
+      "sha256": "283b5df8894815bd8cad86ffd4101fcdcb6f18227bdb73dc473eabc4589faf1d"
+    },
+    {
+      "file": "icons/close.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "12:1600",
+        "nodeName": "Icon / close",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=12-1600"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "40dcd75b1662a0d6c6cb28c909d69864717a9ffa275257ea076cec736dbd0e4c",
+      "sha256": "4ff44c290aa0214f6909d99bc6318099a3d77e2ffb4236f1ebdf4e6dabd3cdcc"
+    },
+    {
+      "file": "icons/image.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "12:1606",
+        "nodeName": "Icon / image",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=12-1606"
+      },
+      "viewBox": "0 0 24 24",
+      "width": 24,
+      "height": 24,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "2913cee9a7d562e851f768d4fe706be8b9af27cf3f6a1410e428fbc4d5b41563",
+      "sha256": "85168163d27c5083090e8add567a297705345a4d211c764d548378afa019159b"
+    },
+    {
+      "file": "icons/eye.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:236",
+        "nodeName": "Icon / eye",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-236"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "41b26f04f43d9bcbca36a2d02d771f429ad49409d7d6f32277b9ca09bb87f31c",
+      "sha256": "2222a62497f621e8898e3af4b555a0ce93369621aa39fcd2d27051655ce9ca47"
+    },
+    {
+      "file": "icons/shield.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:244",
+        "nodeName": "Icon / shield",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-244"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "03adaa54e785e96af42bf22d87bb46fb73649c6956e7d247f575731166ad7985",
+      "sha256": "b1453e2f7a54d474d1e58c42bf5301e6b7de339c422ffe196c67ca2019d70ec3"
+    },
+    {
+      "file": "icons/clock.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:268",
+        "nodeName": "Icon / clock",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-268"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "1948e1c18bfb682f55479c0d2ce3233bb6b67cae3c348074e79e64649b2a10dd",
+      "sha256": "0f0d56a44eabebcbe09f99aa263933037d59b93aa92e871a7ad44f55ac5e4a0f"
+    },
+    {
+      "file": "icons/home.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:282",
+        "nodeName": "Icon / home",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-282"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "013eb9a0ee291b5dd2c33695fc3b81949ce45f41bcca7f8198bd7de5a5d28f00",
+      "sha256": "15a1ebd2c2f17eba7cecf04bd8559a603d3228903986121d39ab4095d819a1e6"
+    },
+    {
+      "file": "icons/history.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "4:3205",
+        "nodeName": "Icon / history",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=4-3205"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "f68c7734aacd524e058d7835fee9d50ebeac50da4111ca2f14a9c3ba6bcfbf43",
+      "sha256": "21796ed7d3839f7f892d5972bb6a68920dd269cf027fec9d676217791c640d82"
+    },
+    {
+      "file": "icons/calendar.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "4:3209",
+        "nodeName": "Icon / calendar",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=4-3209"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "cfa5284629b5f61cc69c99703b99317ce9b333aa1b1bd92913b223a980c9c77c",
+      "sha256": "9a114402752a19b040cc88c38dc5b6a835bac9a734715c34bc7dff05e95648a9"
+    },
+    {
+      "file": "icons/user.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "4:3214",
+        "nodeName": "Icon / user",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=4-3214"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "2de2728851f78fa3bd899b59e5a3746a743456ef452a2a28e2687c52c62ec1f2",
+      "sha256": "1237eae01834dcc0851b123ea97ec338ba781e13fb6ff79f73f5e44ee5af9398"
+    },
+    {
+      "file": "icons/left.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "4:2531",
+        "nodeName": "Icon / left",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=4-2531"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "303fe72b1f5eca585a8cfdafccdf9b373d1cb3f90237149b25ebf001a5b0ce80",
+      "sha256": "eedb176d972c7bb5f6dcc75c1ee5ebca0c98aa270353a310454f59f4d1fcba4f"
+    },
+    {
+      "file": "icons/logout.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:468",
+        "nodeName": "Icon / logout",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-468"
+      },
+      "viewBox": "0 0 28 28",
+      "width": 28,
+      "height": 28,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "f210632d6b186d8bd53005b94f9f267d7c51c81395d4fea4ac562ffec257eab3",
+      "sha256": "ed536fd03ce9b192a8a7c52f7e2ccc3504c8a639b8b41f62b94eb046b42e2ab8"
+    },
+    {
+      "file": "icons/right.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:564",
+        "nodeName": "Icon / right",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-564"
+      },
+      "viewBox": "0 0 16 16",
+      "width": 16,
+      "height": 16,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "0d7b479c5672461088319cc65776b0e045e129a60e4a998843253b0bd432c3c4",
+      "sha256": "dd9d8082c7bf79a501f6c57abb72d281a73a9a011e16371b3bd81139875716d7"
+    },
+    {
+      "file": "icons/download.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:712",
+        "nodeName": "Icon / download",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-712"
+      },
+      "viewBox": "0 0 24 24",
+      "width": 24,
+      "height": 24,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "e62920845ce8323c0d981a44aa911fe161255a17104dd4976e6cf07c5b49f896",
+      "sha256": "59cce5b3c6159430dfa62580af50c4a92a788c2c2aa9738520ba2f90ada0838c"
+    },
+    {
+      "file": "icons/grid.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "4:9827",
+        "nodeName": "Icon / grid",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=4-9827"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "2089b7abb1b1df2377f0740ed82f099596a0b2c3f8688161ba55175d430d677a",
+      "sha256": "ec7b482943f6bcd86e5a5adc6f7d6fcbeb72b7b272c2d5c62099626d7fc4a717"
+    },
+    {
+      "file": "icons/users.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "4:9834",
+        "nodeName": "Icon / users",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=4-9834"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "72ffce6ce16fbb32d4242bdded6841716280671747bbca741cd5357952c311a8",
+      "sha256": "b59d8cd519bdbce680588cde772bf777a10b50c327c1efd37cb6e2155962d85a"
+    },
+    {
+      "file": "icons/filter.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "4:9856",
+        "nodeName": "Icon / filter",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=4-9856"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "de94347b73bcb0c74c3bce48f03bc556e3e803af3d46f68bb7df216a96272445",
+      "sha256": "56b2b0acd0c31b79ee8dd3f9b20ff44703ee936363f1445c1ef78dcdc6abcc7b"
+    },
+    {
+      "file": "icons/edit.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "4:4462",
+        "nodeName": "Icon / edit",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=4-4462"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "30a251ff24631112cdc5a1834e6c635e39222e925387f46c535294f6a5050dcd",
+      "sha256": "599e9f0c590b09063957f0fcb3c1b2cc95397612ac8121d30dcb9c3b00a4a39c"
+    },
+    {
+      "file": "icons/lock.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:1236",
+        "nodeName": "Icon / lock",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-1236"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "c0912664aa56e2b483cba68a7a2f4559769766f9c704369e0cc1ca3dbf564fed",
+      "sha256": "d38d54b8e80e84e0647d9b1bf12aff2a72cebcfb55e567d2a894ac7d96cdda0d"
+    },
+    {
+      "file": "icons/plus.svg",
+      "kind": "icon",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "12:2954",
+        "nodeName": "Icon / plus",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=12-2954"
+      },
+      "viewBox": "0 0 20 20",
+      "width": 20,
+      "height": 20,
+      "transformation": "Replace monochrome fill/stroke paint with currentColor; preserve viewBox, dimensions, path data, stroke widths/caps/joins, and opacity.",
+      "exportSha256": "2042889435deaccf7670c13236ec62b1b2600f6b5c0d423870d218e3a2fc3455",
+      "sha256": "5ed30da377c1db1b4e1ab478229599d3e1dd66b3f5f3de3ae16102e54701666e"
+    },
+    {
+      "file": "brand/absensi-mark.svg",
+      "kind": "brand",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:224",
+        "nodeName": "Brand / Absensi",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-224"
+      },
+      "viewBox": "0 0 36 36",
+      "width": 36,
+      "height": 36,
+      "transformation": "None; preserve original brand colors and outlined wordmark.",
+      "exportSha256": "e5afca05167e866c29efba170fbb92013735a155c4458ff4435da12991003b65",
+      "sha256": "e5afca05167e866c29efba170fbb92013735a155c4458ff4435da12991003b65"
+    },
+    {
+      "file": "brand/absensi-wordmark.svg",
+      "kind": "brand",
+      "source": {
+        "provider": "Figma Desktop Bridge exportAsync",
+        "fileKey": "KM0DmWqjDH4TfBxMktMpWP",
+        "nodeId": "2:227",
+        "nodeName": "absensi",
+        "url": "https://www.figma.com/design/KM0DmWqjDH4TfBxMktMpWP/absabsensi-karyawan?node-id=2-227"
+      },
+      "viewBox": "0 0 85 18",
+      "width": 140,
+      "height": 34,
+      "transformation": "None; preserve original brand colors and outlined wordmark.",
+      "exportSha256": "9a6fed76512e16e6267188076d031d067b1abccc315ab46e4550fe8a66cb6aa2",
+      "sha256": "9a6fed76512e16e6267188076d031d067b1abccc315ab46e4550fe8a66cb6aa2"
+    }
+  ],
+  "fonts": [
+    {
+      "file": "fonts/manrope-variable.woff2",
+      "family": "Manrope",
+      "style": "normal",
+      "weightRange": [
+        200,
+        800
+      ],
+      "licenseFile": "fonts/manrope-OFL.txt",
+      "source": "https://github.com/google/fonts/tree/main/ofl/manrope",
+      "upstreamFile": "Manrope[wght].ttf",
+      "transformation": "Lossless TTF-to-WOFF2 packaging with FontTools/Brotli; outlines and variable weight axis unchanged.",
+      "sha256": "ec1a6bdbca50c7ebbeb15377972024cd3bb41712a474997d12c6255a50cc96b7"
+    },
+    {
+      "file": "fonts/jetbrains-mono-variable.woff2",
+      "family": "JetBrains Mono",
+      "style": "normal",
+      "weightRange": [
+        100,
+        800
+      ],
+      "licenseFile": "fonts/jetbrains-mono-OFL.txt",
+      "source": "https://github.com/google/fonts/tree/main/ofl/jetbrainsmono",
+      "upstreamFile": "JetBrainsMono[wght].ttf",
+      "transformation": "Lossless TTF-to-WOFF2 packaging with FontTools/Brotli; outlines and variable weight axis unchanged.",
+      "sha256": "2000c7d71645d2d052e3ca4ea334b8b361e08e108a741d1f1aaf1cf15db02408"
+    }
+  ],
+  "tokens": {
+    "source": "design/tokens.json at workspace root",
+    "themeFile": "src/styles/index.css",
+    "verifiedVariables": [
+      {
+        "name": "color/canvas",
+        "figmaVariableId": "VariableID:2:3",
+        "value": "#f7f7f2"
+      },
+      {
+        "name": "color/surface",
+        "figmaVariableId": "VariableID:2:4",
+        "value": "#ffffff"
+      },
+      {
+        "name": "color/surface-muted",
+        "figmaVariableId": "VariableID:2:5",
+        "value": "#e5e1d8"
+      },
+      {
+        "name": "color/border",
+        "figmaVariableId": "VariableID:2:6",
+        "value": "#d8ddd5"
+      },
+      {
+        "name": "color/ink",
+        "figmaVariableId": "VariableID:2:7",
+        "value": "#2a1d17"
+      },
+      {
+        "name": "color/text-muted",
+        "figmaVariableId": "VariableID:2:8",
+        "value": "#65564c"
+      },
+      {
+        "name": "color/action",
+        "figmaVariableId": "VariableID:2:9",
+        "value": "#456f3a"
+      },
+      {
+        "name": "color/action-hover",
+        "figmaVariableId": "VariableID:2:10",
+        "value": "#36592d"
+      },
+      {
+        "name": "color/on-action",
+        "figmaVariableId": "VariableID:2:11",
+        "value": "#ffffff"
+      },
+      {
+        "name": "color/forest",
+        "figmaVariableId": "VariableID:2:12",
+        "value": "#18392b"
+      },
+      {
+        "name": "color/success",
+        "figmaVariableId": "VariableID:2:13",
+        "value": "#2e6444"
+      },
+      {
+        "name": "color/success-soft",
+        "figmaVariableId": "VariableID:2:14",
+        "value": "#edf4e9"
+      },
+      {
+        "name": "color/warning",
+        "figmaVariableId": "VariableID:2:15",
+        "value": "#885b15"
+      },
+      {
+        "name": "color/warning-soft",
+        "figmaVariableId": "VariableID:2:16",
+        "value": "#fbf1de"
+      },
+      {
+        "name": "color/danger",
+        "figmaVariableId": "VariableID:2:17",
+        "value": "#a83f34"
+      },
+      {
+        "name": "color/danger-soft",
+        "figmaVariableId": "VariableID:2:18",
+        "value": "#fcede8"
+      },
+      {
+        "name": "space/4",
+        "figmaVariableId": "VariableID:2:19",
+        "value": 4
+      },
+      {
+        "name": "space/8",
+        "figmaVariableId": "VariableID:2:20",
+        "value": 8
+      },
+      {
+        "name": "space/12",
+        "figmaVariableId": "VariableID:2:21",
+        "value": 12
+      },
+      {
+        "name": "space/16",
+        "figmaVariableId": "VariableID:2:22",
+        "value": 16
+      },
+      {
+        "name": "space/24",
+        "figmaVariableId": "VariableID:2:23",
+        "value": 24
+      },
+      {
+        "name": "space/32",
+        "figmaVariableId": "VariableID:2:24",
+        "value": 32
+      },
+      {
+        "name": "space/48",
+        "figmaVariableId": "VariableID:2:25",
+        "value": 48
+      },
+      {
+        "name": "space/64",
+        "figmaVariableId": "VariableID:2:26",
+        "value": 64
+      },
+      {
+        "name": "space/96",
+        "figmaVariableId": "VariableID:2:27",
+        "value": 96
+      },
+      {
+        "name": "space/128",
+        "figmaVariableId": "VariableID:2:28",
+        "value": 128
+      },
+      {
+        "name": "radius/8",
+        "figmaVariableId": "VariableID:2:29",
+        "value": 8
+      },
+      {
+        "name": "radius/12",
+        "figmaVariableId": "VariableID:2:30",
+        "value": 12
+      },
+      {
+        "name": "radius/20",
+        "figmaVariableId": "VariableID:2:31",
+        "value": 20
+      },
+      {
+        "name": "size/touch-min",
+        "figmaVariableId": "VariableID:2:32",
+        "value": 48
+      },
+      {
+        "name": "motion/hover",
+        "figmaVariableId": "VariableID:2:33",
+        "value": 140
+      },
+      {
+        "name": "motion/press",
+        "figmaVariableId": "VariableID:2:34",
+        "value": 90
+      },
+      {
+        "name": "color/control-border",
+        "figmaVariableId": "VariableID:2:2254",
+        "value": "#85877b"
+      }
+    ]
+  },
+  "excludedRasterAssets": [
+    {
+      "sourceFileKey": "KM0DmWqjDH4TfBxMktMpWP",
+      "exampleNodeId": "2:210",
+      "nodeName": "Evidence / Home workspace illustration",
+      "imageNodeCount": 5,
+      "uniqueImageCount": 1,
+      "existingReference": "design/figma/evidence-workspace.png at workspace root",
+      "provenance": "design/figma/asset-provenance.md at workspace root",
+      "reason": "Prototype-only illustrative attendance evidence; not a production photo or app decoration. No copy is shipped in src/assets."
+    }
+  ]
+}
