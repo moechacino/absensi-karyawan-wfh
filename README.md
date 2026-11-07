@@ -86,7 +86,8 @@ there is no template counter/sum/snapshot test.
 The lockfile records the installed dependency set. Axios and TanStack Query are
 the selected HTTP/server-state libraries. React Router and React Hook Form are
 installed for their later tasks. Tailwind's Vite plugin is configured without
-adding a UI, headless, or icon library.
+adding other UI, headless, or icon libraries. React Select 5.10.2 is the
+approved dropdown exception, styled through unstyled mode and Tailwind classes.
 
 TypeScript is 5.9.3 because `openapi-typescript` 7.13.0 declares a TypeScript 5
 peer requirement; the starter's TypeScript 6 range was incompatible with that
@@ -105,4 +106,17 @@ touch-size utilities, 140/90 ms motion, and inspected typography sizes.
 
 Fonts are self-hosted; runtime rendering makes no Figma/Google Fonts request.
 The illustrative evidence photo stays outside production assets. Accessible
-shared components and their interactions belong to WEB-003.
+shared components and their interactions are documented in WEB-003.
+
+## Shared components
+
+The [component guide](src/shared/ui/README.md) documents the project-owned
+Tailwind controls, dialogs, fields, local icons, search/date/file primitives,
+feedback, tabs, pagination, and responsive list patterns. Feature values and
+server decisions stay outside those components.
+
+Open http://localhost:5173/dev/components on the development server for the
+local review page. It makes no API requests and is excluded from production
+JavaScript. The automated suite remains unit tests only; the native dialog
+methods are mocked in jsdom, while layout/keyboard observations are separate
+manual review evidence in WEB-003.
