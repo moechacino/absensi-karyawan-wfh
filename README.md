@@ -37,7 +37,8 @@ URLs cannot contain credentials, query strings, or fragments.
 
 The dev proxy forwards `/api/v1` without rewriting the prefix. Set its target to
 the API server origin; omit it when using a separately configured API origin.
-The scaffold makes no API calls. When API integration is implemented, the
+The application entry makes no API calls. The shared Axios boundary is available
+for feature services; authentication/session wiring belongs to WEB-006. The
 backend must configure the browser origin for CSRF trust independently of CORS.
 The proxy's `changeOrigin` changes the upstream Host, not the browser's Origin.
 
@@ -51,8 +52,10 @@ changing deployment environment variables does not rewrite an existing bundle.
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Run the Vite development server. |
+| `npm run api:generate` | Generate browser types from `../contracts/openapi.json`. |
+| `npm run api:check` | Fail if generated API types differ from the shared contract. |
 | `npm run typecheck` | Check application, tooling, and unit-test TypeScript. |
-| `npm run build` | Run type checking and produce `dist/`. |
+| `npm run build` | Check API type drift, run type checking, and produce `dist/`. |
 | `npm run lint` | Run ESLint with zero warnings allowed. |
 | `npm test` | Run unit tests once. |
 | `npm run test:watch` | Watch unit tests while developing. |
@@ -92,8 +95,9 @@ approved dropdown exception, styled through unstyled mode and Tailwind classes.
 TypeScript is 5.9.3 because `openapi-typescript` 7.13.0 declares a TypeScript 5
 peer requirement; the starter's TypeScript 6 range was incompatible with that
 requirement. Router 7.18.5 and jsdom 28.1.0 support the baseline Node runtime.
-Vitest 5.1.0 supports Vite 8. OpenAPI generation, request clients, query policies,
-protected routes, and authentication are intentionally owned by later tasks.
+Vitest 5.1.0 supports Vite 8. Generated types and the Axios boundary are available
+in `src/shared/api/`; query policies, protected routes, and authentication belong
+to their later tasks.
 
 ## Design assets and theme
 
@@ -120,3 +124,19 @@ local review page. It makes no API requests and is excluded from production
 JavaScript. The automated suite remains unit tests only; the native dialog
 methods are mocked in jsdom, while layout/keyboard observations are separate
 manual review evidence in WEB-003.
+
+
+## Typed API boundary
+
+The [API guide](src/shared/api/README.md) covers type generation, Axios service
+functions, multipart data, private file reads, and normalized errors. Generate
+from the sibling shared contract with `npm run api:generate`; do not edit
+`schema.d.ts`. `npm run api:check` also runs before production builds. Keep the
+`contracts/` sibling available in local/CI checkouts.
+
+Create one API client during application/session composition. Supply a current
+in-memory token accessor and authentication-failure callback; the boundary does
+not read sessionStorage or implement auth routes itself. Its Axios fetch adapter
+bypasses the browser HTTP cache and blocks redirects. Backend `private, no-store`
+response headers and cross-origin header exposure still require server support.
+No API feature is invoked by the current application entry.
