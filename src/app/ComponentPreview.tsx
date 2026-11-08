@@ -214,8 +214,8 @@ export default function ComponentPreview() {
               ),
             },
             {
-              value: 'balances',
-              label: 'Saldo',
+              value: 'details',
+              label: 'Detail',
               content: (
                 <p id="preview-details">
                   Contoh panel kedua. Tab dapat dipilih dengan Enter atau Space
