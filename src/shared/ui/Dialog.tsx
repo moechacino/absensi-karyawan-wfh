@@ -111,6 +111,7 @@ export function ConfirmationDialog({
   onConfirm,
   confirmLabel = 'Konfirmasi',
   busyLabel = 'Menyimpan…',
+  confirmDisabled,
   danger,
   children,
   ...props
@@ -120,6 +121,7 @@ export function ConfirmationDialog({
     confirmLabel?: string
     busyLabel?: string
     danger?: boolean
+    confirmDisabled?: boolean
   }
 >) {
   return (
@@ -137,6 +139,7 @@ export function ConfirmationDialog({
           <Button
             variant={danger ? 'danger' : 'primary'}
             busy={props.busy}
+            disabled={confirmDisabled}
             busyLabel={busyLabel}
             onClick={onConfirm}
           >
