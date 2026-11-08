@@ -72,7 +72,7 @@ export function monitoringRowView(row: MonitoringRow) {
   const attendance = row.day.attendance
   return {
     employeeName: row.employee.fullName,
-    employeeCode: row.employee.employeeCode,
+    employeeReference: row.employee.id.slice(0, 8),
     divisionName: row.employee.division.name,
     status: statusLabels[row.day.status],
     attendanceId: attendance?.id,

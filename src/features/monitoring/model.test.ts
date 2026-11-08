@@ -11,7 +11,6 @@ import { getAttendanceForHR, monitorAttendance } from './api'
 
 const employee = {
   id: 'e1',
-  employeeCode: 'EMP-001',
   fullName: 'Karyawan Contoh',
   division: { id: 'd1', code: 'DIV-1', name: 'Product' },
   position: { id: 'p1', code: 'POS-1', name: 'Designer' },

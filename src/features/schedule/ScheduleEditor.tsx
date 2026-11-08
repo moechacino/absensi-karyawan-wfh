@@ -43,7 +43,6 @@ export function ScheduleEditor({
     identity: profile?.id ?? null,
     execute: (input: ScheduleInput, signal) =>
       previewWorkSchedule(api, input, signal),
-    getExpiresAt: (result) => result.impact.expiresAt ?? undefined,
   })
   const command = useCommand({
     identity: profile?.id ?? null,
@@ -115,7 +114,6 @@ export function ScheduleEditor({
       return
     void command.run({
       ...draft,
-      impactToken: preview.result!.impact.impactToken!,
     })
   }
   return (
@@ -301,7 +299,7 @@ export function ScheduleEditor({
       )}
       {preview.result && (
         <ScheduleImpactDialog
-          key={preview.result.impact.impactToken ?? 'issues'}
+          key={`${preview.result.comparisonDate}-${preview.result.schedule.expectedVersion}`}
           preview={preview.result}
           current={model.current}
           open={reviewOpen}

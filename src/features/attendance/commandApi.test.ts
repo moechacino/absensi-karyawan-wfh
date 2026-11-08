@@ -7,16 +7,11 @@ describe('attendance commands', () => {
       api = { request } as unknown as ApiClient
     const photo = new File(['bytes'], 'capture.jpg', { type: 'image/jpeg' }),
       signal = new AbortController().signal
-    await checkIn(
-      api,
-      { photo, contextToken: 'server-context' },
-      { idempotencyKey: 'stable-key', signal },
-    )
+    await checkIn(api, { photo }, { idempotencyKey: 'stable-key', signal })
     const sent = request.mock.calls[0][0]
     expect(sent.path).toBe('/me/attendances/check-in')
     expect(sent.data.get('photo')).toBe(photo)
-    expect(sent.data.get('contextToken')).toBe('server-context')
-    expect([...sent.data.keys()]).toEqual(['photo', 'contextToken'])
+    expect([...sent.data.keys()]).toEqual(['photo'])
     expect(sent.idempotencyKey).toBe('stable-key')
     expect(sent.signal).toBe(signal)
   })

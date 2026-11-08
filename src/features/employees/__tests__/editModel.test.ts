@@ -13,7 +13,6 @@ import type { ApiClient } from '../../../shared/api/client'
 
 const employee = {
   id: 'employee-id',
-  employeeCode: 'EMP-001',
   fullName: 'Contoh Pegawai',
   email: 'pegawai@example.test',
   division: { id: 'division-a', name: 'Produk', code: 'PRO' },

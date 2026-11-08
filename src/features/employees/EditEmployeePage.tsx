@@ -147,7 +147,7 @@ function EmployeeEditor({ initial }: { initial: Employee }) {
       </Link>
       <header>
         <p className="font-mono text-small text-text-muted">
-          {base.employeeCode} · Versi {base.version}
+          ID akun · {base.id} · Versi {base.version}
         </p>
         <h1 className="mt-2 text-heading font-medium">Edit profil karyawan</h1>
         <p className="mt-2 text-small text-text-muted">

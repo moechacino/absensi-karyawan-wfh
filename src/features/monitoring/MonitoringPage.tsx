@@ -148,7 +148,7 @@ export default function MonitoringPage() {
                       {monitoringRowView(row).employeeName}
                     </p>
                     <p className="text-label text-text-muted">
-                      {monitoringRowView(row).employeeCode}
+                      {`ID ${monitoringRowView(row).employeeReference}`}
                     </p>
                   </>
                 ),
@@ -222,7 +222,7 @@ export default function MonitoringPage() {
                   {monitoringRowView(row).employeeName}
                 </p>
                 <p className="mb-4 text-label text-text-muted">
-                  {monitoringRowView(row).employeeCode} ·{' '}
+                  {`ID ${monitoringRowView(row).employeeReference}`} ·{' '}
                   {monitoringRowView(row).divisionName}
                 </p>
                 <AttendanceDayCard

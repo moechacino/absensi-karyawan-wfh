@@ -58,7 +58,7 @@ vi.mock('../EmployeeFields', () => ({
 }))
 vi.mock('../../../shared/ui/Dialog', () => ({ ConfirmationDialog: () => null }))
 const result = {
-  employee: { id: 'created', fullName: 'Contoh', employeeCode: 'EMP-123' },
+  employee: { id: 'created-employee-id', fullName: 'Contoh' },
   initialCredentials: {
     email: 'contoh@example.test',
     initialPassword: 'fictional-initial-password',
@@ -118,7 +118,7 @@ describe('employee create command', () => {
     ).not.toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: 'Selesai dan lihat karyawan' }),
-    ).toHaveAttribute('href', '/hr/employees/created')
+    ).toHaveAttribute('href', '/hr/employees/created-employee-id')
   })
 
   it('routes a creation replay with unavailable credentials to the created employee without regenerating an account', async () => {

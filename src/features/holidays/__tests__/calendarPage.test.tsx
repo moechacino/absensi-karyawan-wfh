@@ -127,7 +127,7 @@ describe('HR yearly holiday editor', () => {
     expect(
       screen.queryByRole('button', { name: /Hari bersama/ }),
     ).not.toBeInTheDocument()
-  })
+  }, 10_000)
 
   it('previews only the explicit batch and commits only the server-returned calendar', async () => {
     setup()

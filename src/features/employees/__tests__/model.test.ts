@@ -39,7 +39,7 @@ describe('employee payload and recovery', () => {
       confirmHrAccess: true,
     })
     expect(creationPayload(draft, false)).not.toHaveProperty('password')
-    expect(creationPayload(draft, false)).not.toHaveProperty('employeeCode')
+    expect(creationPayload(draft, false)).not.toHaveProperty('id')
   })
   it('preserves URL filters/page and recognizes creation replay without recreating the employee', () => {
     expect(

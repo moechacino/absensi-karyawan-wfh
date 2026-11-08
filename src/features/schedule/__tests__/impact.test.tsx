@@ -20,8 +20,6 @@ const preview: SchedulePreview = {
   impact: {
     canApply: true,
     issues: [],
-    impactToken: 'token',
-    expiresAt: '2026-11-08T12:00:00Z',
   },
 }
 

@@ -21,7 +21,6 @@ const home: components['schemas']['Home'] = {
     checkInPolicy: { opensMinutesBeforeStart: 15, lateAfterMinutes: 0 },
   },
   checkInWindow: null,
-  checkInContextToken: null,
 }
 describe('authoritative home projection', () => {
   it('maps every active server status and block reason without calculating eligibility', () => {
@@ -41,16 +40,15 @@ describe('authoritative home projection', () => {
     expect(
       homeView({
         ...home,
-        checkInContextToken: 'context',
         day: { ...home.day, canCheckIn: true },
       }).checkIn,
     ).toBe(true)
   })
-  it('retains the server work date for overnight records and requires context', () => {
+  it('retains the server work date and follows current server eligibility', () => {
     expect(homeView(home).workDate).toBe('2026-11-07')
     expect(
       homeView({ ...home, day: { ...home.day, canCheckIn: true } }).checkIn,
-    ).toBe(false)
+    ).toBe(true)
     expect(
       homeView({ ...home, day: { ...home.day, canCheckOut: true } }).checkOut,
     ).toBe(false)

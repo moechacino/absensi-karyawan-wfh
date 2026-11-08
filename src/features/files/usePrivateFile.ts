@@ -53,7 +53,7 @@ export function usePrivateFile(
     async function load() {
       try {
         if (!validFileMetadata(file!)) throw createApiError('configuration')
-        const blob = await api.readFile(file!, { signal: controller.signal })
+        const blob = await api.readFile(file!, controller.signal)
         if (!alive) return
         if (!verifiedImageBlob(blob, file!))
           throw createApiError('configuration')

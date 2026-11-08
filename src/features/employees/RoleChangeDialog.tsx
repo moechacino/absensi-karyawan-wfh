@@ -101,7 +101,8 @@ export function RoleChangeDialog({
           {role === 'HRD'
             ? 'Akun mendapat kewenangan mengelola karyawan, organisasi, kalender dan jadwal serta melihat absensi.'
             : 'Akun kehilangan kewenangan HRD. Jika ini akun Anda, sesi saat ini akan diakhiri setelah server mengonfirmasi.'}{' '}
-          Server tetap melindungi HRD aktif terakhir.
+          Sesi ini akan berakhir setelah server mengonfirmasi perubahan. Sesi
+          lain dapat tetap aktif sampai tokennya kedaluwarsa.
         </Alert>
         <label className="flex min-h-touch items-center gap-3">
           <input
@@ -118,11 +119,7 @@ export function RoleChangeDialog({
           error={command.error}
           onRetry={() => void command.retry()}
         />
-        {command.error?.problem?.code === 'LAST_ACTIVE_HRD' && (
-          <Alert title="HRD aktif terakhir harus dipertahankan" tone="danger">
-            Aktifkan HRD lain yang berwenang sebelum mengubah akun ini.
-          </Alert>
-        )}
+
         {conflict && (
           <Button
             busy={reviewing}

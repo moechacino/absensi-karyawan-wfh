@@ -57,7 +57,7 @@ function EmployeeRecord({ id }: { id: string }) {
         <div>
           <h1 className="text-heading font-medium">{employee.fullName}</h1>
           <p className="mt-2 font-mono text-small text-text-muted">
-            {employee.employeeCode}
+            ID akun · {employee.id}
           </p>
         </div>
         <div className="flex flex-wrap gap-3">

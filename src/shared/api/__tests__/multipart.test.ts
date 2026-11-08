@@ -8,12 +8,10 @@ describe('multipart serialization', () => {
   it('supports the generated check-in body with untouched file bytes and filename', () => {
     const body: MultipartBody<'checkIn'> = {
       photo: file,
-      contextToken: 'current-context',
     }
     const data = toFormData(body)
-    expect([...data.keys()]).toEqual(['photo', 'contextToken'])
+    expect([...data.keys()]).toEqual(['photo'])
     expect(data.get('photo')).toBe(file)
-    expect(data.get('contextToken')).toBe('current-context')
   })
 
   it('omits absent optional photo parts while preserving meaningful whitespace in text', () => {

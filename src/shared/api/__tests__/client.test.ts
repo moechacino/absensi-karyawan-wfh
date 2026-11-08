@@ -97,7 +97,7 @@ describe('Axios API boundary', () => {
       method: 'POST',
       data,
     })
-    await client.request({ path: '/me', auth: 'none' })
+    await client.request({ path: '/me', authenticated: false })
     expect(token).not.toHaveBeenCalled()
     expect(adapter.mock.calls[0][0].headers.get('Authorization')).toBe(false)
     expect(JSON.parse(adapter.mock.calls[0][0].data as string)).toEqual(data)
@@ -196,10 +196,10 @@ describe('Axios API boundary', () => {
       kind: 'http',
       status: 401,
     })
-    expect(onAuthenticationFailure).toHaveBeenCalledWith({
-      token: 'token-one',
-      error: expect.objectContaining({ status: 401 }),
-    })
+    expect(onAuthenticationFailure).toHaveBeenCalledWith(
+      'token-one',
+      expect.objectContaining({ status: 401 }),
+    )
     onAuthenticationFailure.mockClear()
     adapter.mockImplementation(async (config) => {
       token.mockReturnValue('new-account')

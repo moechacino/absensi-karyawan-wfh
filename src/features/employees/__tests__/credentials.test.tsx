@@ -18,7 +18,6 @@ vi.mock('@tanstack/react-query', () => ({
     data: {
       id: 'employee',
       fullName: 'Contoh',
-      employeeCode: 'EMP-001',
       email: 'contoh@example.test',
       role: 'EMPLOYEE',
       status: 'ACTIVE',

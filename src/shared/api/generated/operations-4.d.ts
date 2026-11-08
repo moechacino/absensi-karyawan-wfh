@@ -4,7 +4,7 @@
  */
 
 // Source: ../contracts/openapi.json
-// SHA-256: 0084af30ce6add56bc39dbf69358d6b756a02b04ca28cd8fc68e7f9c0912233e
+// SHA-256: e56abe7448467b1496fdb85043979f3380299e11fdd5d8c019303b64712d62b0
 
 import type { components } from '../schema'
 
@@ -302,7 +302,7 @@ export interface OperationsPart4 {
         };
         requestBody?: never;
         responses: {
-            /** @description Success. Read global schedule audit history */
+            /** @description Success. Read global schedule version history */
             200: {
                 headers: {
                     /** @description Current request correlation ID. */

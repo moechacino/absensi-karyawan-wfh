@@ -35,12 +35,6 @@ export function ImpactSummary({
           ))}
         </ul>
       )}
-      {impact.expiresAt && (
-        <p className="text-small text-text-muted">
-          Peninjauan berlaku hingga {impact.expiresAt}. Perubahan input
-          memerlukan peninjauan ulang.
-        </p>
-      )}
     </div>
   )
 }

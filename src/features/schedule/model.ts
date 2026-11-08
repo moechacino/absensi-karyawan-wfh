@@ -64,14 +64,10 @@ export function initialSchedule(
 export function canApplySchedule(
   input: ScheduleInput,
   preview: SchedulePreview | undefined,
-  now = Date.now(),
 ): boolean {
   return Boolean(
     preview &&
       preview.impact.canApply &&
-      preview.impact.impactToken &&
-      preview.impact.expiresAt &&
-      Date.parse(preview.impact.expiresAt) > now &&
       intentFingerprint(input) === intentFingerprint(preview.schedule),
   )
 }

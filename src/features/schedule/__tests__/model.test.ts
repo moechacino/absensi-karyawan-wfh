@@ -30,8 +30,6 @@ function preview(): SchedulePreview {
     impact: {
       canApply: true,
       issues: [],
-      impactToken: 'bound-token',
-      expiresAt: '2026-11-08T12:10:00Z',
     },
   }
 }
@@ -66,32 +64,20 @@ describe('schedule configuration', () => {
     expect(validateSchedule({ ...input, timeZone: '' }).timeZone).toBeDefined()
   })
 
-  it('binds the save token to exact input, current version and returned expiry', () => {
-    const now = Date.parse('2026-11-08T12:00:00Z'),
-      result = preview()
-    expect(canApplySchedule(input, result, now)).toBe(true)
+  it('binds the advisory preview to exact input/version and current validation', () => {
+    const result = preview()
+    expect(canApplySchedule(input, result)).toBe(true)
     for (const changed of [
       { ...input, expectedVersion: 3 },
       { ...input, timeZone: 'Asia/Makassar' },
       { ...input, workingDays: [1] },
     ])
-      expect(canApplySchedule(changed, result, now)).toBe(false)
+      expect(canApplySchedule(changed, result)).toBe(false)
     expect(
-      canApplySchedule(input, result, Date.parse('2026-11-08T12:10:00Z')),
-    ).toBe(false)
-    expect(
-      canApplySchedule(
-        input,
-        { ...result, impact: { ...result.impact, canApply: false } },
-        now,
-      ),
-    ).toBe(false)
-    expect(
-      canApplySchedule(
-        input,
-        { ...result, impact: { ...result.impact, impactToken: null } },
-        now,
-      ),
+      canApplySchedule(input, {
+        ...result,
+        impact: { ...result.impact, canApply: false },
+      }),
     ).toBe(false)
   })
 
@@ -133,7 +119,7 @@ describe('schedule configuration', () => {
       params: { q: 'America', atDate: '2026-11-16' },
       signal,
     })
-    const body = { ...input, impactToken: 'bound-token' }
+    const body = { ...input }
     await changeWorkSchedule(api, body, 'stable-intent', signal)
     expect(request).toHaveBeenLastCalledWith({
       path: '/hr/work-schedule',

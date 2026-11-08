@@ -26,7 +26,7 @@ export function homeView(home: components['schemas']['Home']) {
   return {
     title: statusLabels[home.day.status],
     reason: home.day.blockReason ? blockLabels[home.day.blockReason] : null,
-    checkIn: home.day.canCheckIn && Boolean(home.checkInContextToken),
+    checkIn: home.day.canCheckIn,
     checkOut: home.day.canCheckOut && home.day.attendance?.state === 'WORKING',
     workDate: home.day.workDate,
   }

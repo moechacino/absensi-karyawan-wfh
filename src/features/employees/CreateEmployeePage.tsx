@@ -81,7 +81,7 @@ function CreateEmployeeForm() {
       <div className="space-y-6">
         <h1 className="text-heading font-medium">Akun karyawan dibuat</h1>
         <Alert
-          title={`${receipt.employee.fullName} · ${receipt.employee.employeeCode}`}
+          title={`${receipt.employee.fullName} · ID ${receipt.employee.id.slice(0, 8)}`}
           tone="success"
         >
           Akun telah dikonfirmasi server. Bagikan akses hanya kepada pemilik

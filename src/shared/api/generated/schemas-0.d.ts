@@ -4,7 +4,7 @@
  */
 
 // Source: ../contracts/openapi.json
-// SHA-256: 0084af30ce6add56bc39dbf69358d6b756a02b04ca28cd8fc68e7f9c0912233e
+// SHA-256: e56abe7448467b1496fdb85043979f3380299e11fdd5d8c019303b64712d62b0
 
 import type { components } from '../schema'
 
@@ -102,7 +102,6 @@ export interface SchemasPart0 {
     EmployeeSummary: {
         /** Format: uuid */
         id: string;
-        employeeCode: string;
         fullName: string;
         division: components["schemas"]["MasterSummary"];
         position: components["schemas"]["MasterSummary"];
@@ -111,7 +110,6 @@ export interface SchemasPart0 {
     Employee: {
         /** Format: uuid */
         id: string;
-        employeeCode: string;
         fullName: string;
         division: components["schemas"]["MasterSummary"];
         position: components["schemas"]["MasterSummary"];
@@ -209,14 +207,14 @@ export interface SchemasPart0 {
         /** @constant */
         requiresDifferentPassword: true;
     };
-    /** @description Normal Bearer JWT grant for every successful login, including unchanged initial-password login. No restricted state or refresh token. employee is the same profile returned by GET /me. */
+    /** @description Stateless one-hour Bearer JWT grant. No refresh token or database revocation. Existing claims remain valid until expiry after password/role/status changes or client logout. */
     LoginResult: {
         /** @description Signed JWT. Examples are fictional; never a refresh token. Use only in Authorization: Bearer, never URLs or logs. */
         readonly accessToken: string;
         /** @constant */
         tokenType: "Bearer";
-        /** @description Seconds until the access JWT expires at issuance; expiresAt is the matching absolute instant. */
-        expiresIn: number;
+        /** @constant */
+        expiresIn: 3600;
         /** Format: date-time */
         expiresAt: string;
         /** Format: date-time */
@@ -284,12 +282,10 @@ export interface SchemasPart0 {
         field: string | null;
         message: string;
     };
-    /** @description Schedule/holiday configuration validation only: canApply, issues and actor/input/calendar-version-bound impactToken/expiry. No time-off scans, ledger work or reconciliation. */
+    /** @description Advisory validation result only. Save resubmits inputs and expectedVersion and revalidates current calendar/time state; no stored token or reservation. */
     ChangeImpact: {
         canApply: boolean;
         issues: components["schemas"]["Issue"][];
-        impactToken: string | null;
-        expiresAt: string | null;
     };
     ScheduleChange: {
         expectedVersion: number;
@@ -314,7 +310,6 @@ export interface SchemasPart0 {
         timeZone: string;
         /** Format: date */
         effectiveFrom: string;
-        impactToken: string;
     };
     /** @description Past effectiveFrom dates in the selected timezone are rejected. Today may apply on save without rewriting recorded attendance. Future changes activate at midnight in the selected zone. Transition details remain proposed. */
     SchedulePreview: {
@@ -364,7 +359,6 @@ export interface SchemasPart0 {
         expectedVersion: number;
         upsert: components["schemas"]["Holiday"][];
         remove: string[];
-        impactToken: string;
     };
     HolidayChanged: {
         calendar: components["schemas"]["HolidayCalendar"];
@@ -440,7 +434,7 @@ export interface SchemasPart0 {
         /** Format: date-time */
         closesAt: string;
     };
-    /** @description An open overnight record wins over the device calendar date. Re-read after uncertain check-in outcome. Token binds employee/work date/schedule; every mutation revalidates. */
+    /** @description Authoritative server eligibility and windows; open overnight attendance takes precedence. Check-in re-evaluates the current schedule/holidays and receipt time without a context token. */
     Home: {
         /** Format: date-time */
         serverNow: string;
@@ -450,7 +444,6 @@ export interface SchemasPart0 {
         day: components["schemas"]["AttendanceDay"];
         workSchedule: components["schemas"]["WorkSchedule"];
         checkInWindow: components["schemas"]["CheckInWindow"] | null;
-        checkInContextToken: string | null;
     };
     MonitoringRow: {
         employee: components["schemas"]["EmployeeSummary"];
@@ -494,7 +487,6 @@ export interface SchemasPart0 {
     MeProfile: {
         /** Format: uuid */
         id: string;
-        employeeCode: string;
         fullName: string;
         division: components["schemas"]["MasterSummary"];
         position: components["schemas"]["MasterSummary"];

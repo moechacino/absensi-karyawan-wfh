@@ -18,7 +18,7 @@ export default function ProfilePage() {
     )
   const rows = [
     ['Nama lengkap', profile.fullName],
-    ['Kode karyawan', profile.employeeCode],
+    ['ID akun', profile.id],
     ['Email kantor', profile.email],
     ['Divisi', profile.division.name],
     ['Jabatan', profile.position.name],
@@ -52,7 +52,7 @@ export default function ProfilePage() {
           />
           <div>
             <h2 className="text-title font-medium">{profile.fullName}</h2>
-            <p className="text-text-muted">{profile.employeeCode}</p>
+            <p className="text-text-muted">ID akun {profile.id.slice(0, 8)}</p>
             {profile.photo && (
               <Button variant="ghost" onClick={() => setViewerOpen(true)}>
                 Lihat foto

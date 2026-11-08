@@ -10,10 +10,9 @@ import {
 import type { JsonResult } from '../../../shared/api/types'
 
 const now = Date.parse('2026-11-08T00:00:00Z')
-const expiresAt = new Date(now + 60_000).toISOString()
+const expiresAt = new Date(now + 3_600_000).toISOString()
 const profile: JsonResult<'getOwnProfile'> = {
   id: 'employee-one',
-  employeeCode: 'EMP-001',
   fullName: 'Contoh Karyawan',
   division: { id: 'division', name: 'Engineering', code: 'ENG' },
   position: { id: 'position', name: 'Developer', code: 'DEV' },
@@ -35,7 +34,7 @@ const profile: JsonResult<'getOwnProfile'> = {
 const loginResult: JsonResult<'login'> = {
   accessToken: 'private-token',
   tokenType: 'Bearer',
-  expiresIn: 60,
+  expiresIn: 3600,
   expiresAt,
   serverNow: new Date(now).toISOString(),
   employee: profile,
@@ -274,7 +273,7 @@ describe('session lifecycle', () => {
     const { session, cleanup } = harness()
     await session.login({ email: 'user@example.test', password: 'private' })
     expect(session.getSnapshot().status).toBe('authenticated')
-    await vi.advanceTimersByTimeAsync(60_000)
+    await vi.advanceTimersByTimeAsync(3_600_000)
     expect(session.getSnapshot()).toMatchObject({
       status: 'anonymous',
       reason: 'expired',
@@ -289,7 +288,7 @@ describe('session lifecycle', () => {
     vi.spyOn(Date, 'now').mockImplementation(() => clock)
     const { session } = harness()
     await session.login({ email: 'user@example.test', password: 'private' })
-    clock += 60_001
+    clock += 3_600_001
     session.recheck()
     expect(session.getSnapshot().status).toBe('anonymous')
   })

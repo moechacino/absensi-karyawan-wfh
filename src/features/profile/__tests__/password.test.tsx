@@ -32,7 +32,6 @@ vi.mock('../../../shared/auth', () => ({
     profile: {
       id: 'employee-one',
       fullName: 'Contoh Karyawan',
-      employeeCode: 'EMP-001',
       division: { name: 'Engineering' },
       position: { name: 'Developer' },
       email: 'contoh@example.test',

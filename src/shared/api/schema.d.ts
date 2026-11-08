@@ -4,7 +4,7 @@
  */
 
 // Source: ../contracts/openapi.json
-// SHA-256: 0084af30ce6add56bc39dbf69358d6b756a02b04ca28cd8fc68e7f9c0912233e
+// SHA-256: e56abe7448467b1496fdb85043979f3380299e11fdd5d8c019303b64712d62b0
 
 import type { PathsPart0 } from './generated/paths-0'
 import type { SchemasPart0 } from './generated/schemas-0'

@@ -52,7 +52,7 @@ export default function EmployeesPage() {
       </header>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <TextField
-          label="Cari nama atau kode karyawan"
+          label="Cari nama, email, atau ID akun"
           type="search"
           value={filters.q ?? ''}
           maxLength={160}
@@ -110,7 +110,7 @@ export default function EmployeesPage() {
                   >
                     {row.fullName}
                     <span className="block font-mono text-label text-text-muted">
-                      {row.employeeCode}
+                      ID {row.id.slice(0, 8)}
                     </span>
                   </Link>
                 ),
@@ -148,7 +148,7 @@ export default function EmployeesPage() {
                 >
                   {row.fullName}
                 </Link>
-                <p className="font-mono text-label">{row.employeeCode}</p>
+                <p className="font-mono text-label">ID {row.id.slice(0, 8)}</p>
                 <p className="break-all">{row.email}</p>
                 <p>
                   {row.division.name} · {row.position.name}

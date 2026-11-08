@@ -4,7 +4,7 @@
  */
 
 // Source: ../contracts/openapi.json
-// SHA-256: 0084af30ce6add56bc39dbf69358d6b756a02b04ca28cd8fc68e7f9c0912233e
+// SHA-256: e56abe7448467b1496fdb85043979f3380299e11fdd5d8c019303b64712d62b0
 
 import type { operations } from '../schema'
 
@@ -40,7 +40,7 @@ export interface PathsPart0 {
         put?: never;
         /**
          * Revoke current JWT
-         * @description Revoke the current JWT ID until expiry and return 204. Client clears local token/private state. Expiry requires login again, with no refresh/logout retry. Origin-based CSRF protection applies.
+         * @description Return 204 for a valid JWT. Client discards its token; this endpoint stores no revocation record and cannot invalidate copied tokens before expiry.
          */
         post: operations["logout"];
         delete?: never;
@@ -60,7 +60,7 @@ export interface PathsPart0 {
         put?: never;
         /**
          * Change own password, set changed flag, and invalidate JWTs
-         * @description One route for first and subsequent self password changes. Require Bearer JWT and currentPassword; validate confirmation/policy and a different new password. Atomically overwrite the stored initial plaintext/current hash with the new password hash, set hasPasswordChanged=true, increment resource/authentication versions, and invalidate all account JWTs. Return 204 and require login. The flag is not a client-editable property.
+         * @description Verify current password and atomically replace initial plaintext/personal hash with an adaptive password hash. Does not revoke issued stateless JWTs.
          */
         post: operations["changeOwnPassword"];
         delete?: never;
@@ -296,7 +296,7 @@ export interface PathsPart0 {
         put?: never;
         /**
          * Preview global schedule, timezone, and leave recalculation impact
-         * @description Preview proposed schedule, UTC activation and validation issues without changing data. Bind impactToken to actor, inputs, current calendar version and time context. No request/balance impact or reconciliation while time off is deferred.
+         * @description Advisory configuration validation only; returns resolved proposal and issues, with no token, reservation, audit event or reconciliation. Save revalidates submitted input and expectedVersion.
          */
         post: operations["previewWorkSchedule"];
         delete?: never;
@@ -315,7 +315,7 @@ export interface PathsPart0 {
         get?: never;
         /**
          * Apply global schedule and reconcile affected future leave
-         * @description Atomically version/save the global schedule and audit history with expectedVersion, impactToken and idempotency. Preserve recorded attendance snapshots and revalidate date/time context. No time-off tables, balance effects, empty reconciliation or deferred module dependency.
+         * @description Revalidate all submitted values, expectedVersion and current time/calendar state inside the calendar-coordinated write. Commit configuration/version and idempotency atomically; preserve attendance snapshots. No preview token, audit_events or reconciliation record.
          */
         put: operations["changeWorkSchedule"];
         post?: never;
@@ -333,8 +333,8 @@ export interface PathsPart0 {
             cookie?: never;
         };
         /**
-         * Read global schedule audit history
-         * @description Read global schedule audit history
+         * Read global schedule version history
+         * @description Read global schedule version history
          */
         get: operations["listWorkScheduleVersions"];
         put?: never;
@@ -376,7 +376,7 @@ export interface PathsPart0 {
         put?: never;
         /**
          * Preview calendar batch and future leave impacts
-         * @description Validate an annual upsert/remove batch and return canApply/issues with an actor/input/calendar-version-bound impactToken. No time-off impact lookup.
+         * @description Advisory configuration validation only; returns resolved proposal and issues, with no token, reservation, audit event or reconciliation. Save revalidates submitted input and expectedVersion.
          */
         post: operations["previewHolidayChange"];
         delete?: never;
@@ -396,7 +396,7 @@ export interface PathsPart0 {
         put?: never;
         /**
          * Apply calendar batch and reconcile affected future leave
-         * @description Atomically apply validated year/date changes and audit/version/idempotency under the calendar lock. Reject past dates, duplicate/overlapping entries and stale preview. Return the calendar only; no leave or balance reconciliation.
+         * @description Revalidate all submitted values, expectedVersion and current time/calendar state inside the calendar-coordinated write. Commit configuration/version and idempotency atomically; preserve attendance snapshots. No preview token, audit_events or reconciliation record.
          */
         post: operations["changeHolidayCalendar"];
         delete?: never;
@@ -456,7 +456,7 @@ export interface PathsPart0 {
         put?: never;
         /**
          * Capture-backed automatic check-in
-         * @description Multipart current camera photo and contextToken. Use authoritative full-upload receipt and exact check-in window, preserving accepted time on replay. Block rest days, company holidays, unconfigured schedules, duplicates and an existing open attendance. No time-off check or approval lock. Store ready photo/reference and attendance before returning 201.
+         * @description Multipart photo with Idempotency-Key and Bearer JWT; no context token. Resolve current eligibility from full-upload receipt time under calendar/employee coordination. A failed file write returns an error and commits no SQL change; SQL failure rolls back and attempts direct file cleanup. Crash/orphan recovery and persistent deletion retries are deferred.
          */
         post: operations["checkIn"];
         delete?: never;
@@ -574,7 +574,7 @@ export interface PathsPart0 {
         };
         /**
          * Read authorized local file content by ID
-         * @description Stream private local check-in evidence or employee profile images. Require current Bearer JWT and parent ownership/active HRD access on every read. Return indistinguishable 404 for missing/inaccessible objects; no public path, signed URL, standalone upload/delete/list or time-off attachment/PDF support.
+         * @description Stream private local image content using a valid unexpired stateless JWT and committed parent ownership/HRD authorization. No database lookup solely for JWT authentication. No standalone upload/delete endpoint.
          */
         get: operations["getFileContent"];
         put?: never;

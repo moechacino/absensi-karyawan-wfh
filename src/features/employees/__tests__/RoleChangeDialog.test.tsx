@@ -19,7 +19,6 @@ vi.mock('../../../shared/auth', () => ({
 }))
 const employee = {
   id: 'employee-1',
-  employeeCode: 'EMP-001',
   fullName: 'Pegawai Contoh',
   email: 'p@example.test',
   division: { id: 'div-1', name: 'Produk', code: 'PRO' },
@@ -82,33 +81,5 @@ describe('separate HR role command', () => {
     })
     await waitFor(() => expect(onSaved).toHaveBeenCalledWith(result))
     expect(onClose).toHaveBeenCalledOnce()
-  })
-  it('keeps a final-HRD denial visible and never calls profile PATCH or changes passwords', async () => {
-    mocks.request.mockRejectedValueOnce({
-      isAxiosError: true,
-      response: {
-        status: 409,
-        data: {
-          type: 'urn:test',
-          title: 'Protected',
-          status: 409,
-          code: 'LAST_ACTIVE_HRD',
-          requestId: 'request-1',
-        },
-      },
-    })
-    renderDialog()
-    const select = screen.getByRole('combobox', { name: 'Peran baru' })
-    fireEvent.focus(select)
-    fireEvent.click(screen.getByRole('option', { name: 'HRD' }))
-    fireEvent.click(screen.getByRole('checkbox'))
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Simpan peran terpisah' }),
-    )
-    await screen.findByText(/Aktifkan HRD lain/)
-    expect(mocks.request.mock.calls[0][0].path).toBe(
-      '/hr/employees/employee-1/role',
-    )
-    expect(mocks.request.mock.calls[0][0].method).toBe('PUT')
   })
 })

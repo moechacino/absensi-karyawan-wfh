@@ -113,10 +113,8 @@ describe('private byte lifecycle', () => {
     await vi.waitFor(() =>
       expect(result.current.url).toBe('blob:private-image'),
     )
-    expect(mocks.readFile).toHaveBeenCalledWith(file, {
-      signal: expect.any(AbortSignal),
-    })
-    const signal = mocks.readFile.mock.calls[0][1].signal as AbortSignal
+    expect(mocks.readFile).toHaveBeenCalledWith(file, expect.any(AbortSignal))
+    const signal = mocks.readFile.mock.calls[0][1] as AbortSignal
     unmount()
     expect(signal.aborted).toBe(true)
     expect(mocks.revokeUrl).toHaveBeenCalledWith('blob:private-image')

@@ -66,12 +66,7 @@ export default function CameraCheckInPage() {
     setCaptureError(null)
     try {
       const fresh = await home.refetch()
-      if (
-        !fresh.data ||
-        fresh.isError ||
-        !homeView(fresh.data).checkIn ||
-        !fresh.data.checkInContextToken
-      ) {
+      if (!fresh.data || fresh.isError || !homeView(fresh.data).checkIn) {
         setCaptureError(
           'Kelayakan check-in telah berubah. Periksa status terbaru di beranda.',
         )
@@ -80,7 +75,7 @@ export default function CameraCheckInPage() {
       }
       command.reset()
       const photo = await capturePhoto()
-      await command.run({ photo, contextToken: fresh.data.checkInContextToken })
+      await command.run({ photo })
     } catch (error) {
       setCaptureError(
         error instanceof Error ? error.message : 'Foto belum dapat diambil.',

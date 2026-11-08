@@ -57,7 +57,6 @@ const home: components['schemas']['Home'] = {
     checkInPolicy: { opensMinutesBeforeStart: 15, lateAfterMinutes: 0 },
   },
   checkInWindow: null,
-  checkInContextToken: 'fresh-context',
 }
 describe('capture automatically submits', () => {
   beforeEach(() => {
@@ -112,7 +111,7 @@ describe('capture automatically submits', () => {
     expect(await bytes(retry.data.get('photo'))).toBe(
       await bytes(original.data.get('photo')),
     )
-    expect(retry.data.get('contextToken')).toBe('fresh-context')
+    expect([...retry.data.keys()]).toEqual(['photo'])
     expect(mocks.invalidate).toHaveBeenCalledWith(
       expect.anything(),
       'employee-one',
