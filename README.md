@@ -2,7 +2,7 @@
 
 React + TypeScript + Vite application for employee attendance and HR self-service.
 The product task plan is in [web-tasks](../web-tasks/README.md), with the
-[completion checklist](../web-tasks/index.md) maintained after user review.
+[completion checklist](../web-tasks/index.md).
 
 ## Requirements and setup
 
@@ -17,9 +17,7 @@ npm run dev
 ```
 
 Vite normally serves http://localhost:5173; use the address printed by the server.
-The current page is a minimal application entry using local Figma branding,
-Manrope, and the design theme. Authentication and API operations belong to
-subsequent tasks.
+The app now includes employee and HR routes for authentication, profile, employee and organization management, attendance, schedule and holidays. Time-off features are deferred. The local development preview is at `/dev/components`.
 
 ## Public configuration and local proxy
 
@@ -37,10 +35,9 @@ URLs cannot contain credentials, query strings, or fragments.
 
 The dev proxy forwards `/api/v1` without rewriting the prefix. Set its target to
 the API server origin; omit it when using a separately configured API origin.
-The application entry makes no API calls. The shared Axios boundary is available
-for feature services; authentication/session wiring belongs to WEB-006. The
-backend must configure the browser origin for CSRF trust independently of CORS.
-The proxy's `changeOrigin` changes the upstream Host, not the browser's Origin.
+Feature services use the shared Axios client. It sends browser-managed Origin and
+Fetch Metadata headers; the backend configures trusted origins for CSRF separately
+from CORS. The proxy's `changeOrigin` changes the upstream Host, not the browser's Origin.
 
 Production uses built static assets and a deployment-provided `/api/v1` proxy.
 SPA history fallback must not turn API errors into HTML. The development proxy
@@ -65,9 +62,13 @@ changing deployment environment variables does not rewrite an existing bundle.
 
 ```text
 src/
-  app/           # application composition and providers; routes added later
-  features/      # product capabilities, introduced by their own task
+  app/           # router, auth/query providers, and route boundaries
+  features/      # auth, profile, employees, attendance, company, and HR tools
   shared/        # reusable configuration, API, UI, and domain-free utilities
+    api/         # generated OpenAPI types, Axios boundary, and Problem errors
+    auth/        # session access hooks
+    commands/    # explicit write and uncertain-result state
+    query/       # private query keys, retry policy, and invalidation
     config/      # pure public-config parser and validated application values
   assets/        # local Figma SVGs, licensed WOFF2 fonts, and source manifest
   styles/        # Tailwind theme variables, font faces, and base typography
@@ -88,16 +89,16 @@ there is no template counter/sum/snapshot test.
 
 The lockfile records the installed dependency set. Axios and TanStack Query are
 the selected HTTP/server-state libraries. React Router and React Hook Form are
-installed for their later tasks. Tailwind's Vite plugin is configured without
+used for routing and forms. Tailwind's Vite plugin is configured without
 adding other UI, headless, or icon libraries. React Select 5.10.2 is the
 approved dropdown exception, styled through unstyled mode and Tailwind classes.
 
 TypeScript is 5.9.3 because `openapi-typescript` 7.13.0 declares a TypeScript 5
 peer requirement; the starter's TypeScript 6 range was incompatible with that
 requirement. Router 7.18.5 and jsdom 28.1.0 support the baseline Node runtime.
-Vitest 5.1.0 supports Vite 8. Generated types and the Axios boundary are available
-in `src/shared/api/`; query policies, protected routes, and authentication belong
-to their later tasks.
+Vitest 5.1.0 supports Vite 8. Generated types and the Axios boundary are in
+`src/shared/api/`; query policies, protected routes, and session handling are in
+`src/shared/query/`, `src/app/`, and `src/shared/auth/`.
 
 ## Design assets and theme
 
@@ -120,8 +121,8 @@ feedback, tabs, pagination, and responsive list patterns. Feature values and
 server decisions stay outside those components.
 
 Open http://localhost:5173/dev/components on the development server for the
-local review page. It makes no API requests and is excluded from production
-JavaScript. The automated suite remains unit tests only; the native dialog
+local component review page. It uses illustrative local data and is excluded from
+production JavaScript. The automated suite remains unit tests only; the native dialog
 methods are mocked in jsdom, while layout/keyboard observations are separate
 manual review evidence in WEB-003.
 
@@ -134,9 +135,10 @@ from the sibling shared contract with `npm run api:generate`; do not edit
 `schema.d.ts`. `npm run api:check` also runs before production builds. Keep the
 `contracts/` sibling available in local/CI checkouts.
 
-Create one API client during application/session composition. Supply a current
-in-memory token accessor and authentication-failure callback; the boundary does
-not read sessionStorage or implement auth routes itself. Its Axios fetch adapter
+The auth provider creates one API client with the current in-memory token accessor.
+The session stores only the access JWT and expiresAt in sessionStorage; draft 0.7.0
+uses a one-hour stateless JWT without server-side revocation. The API client does
+not read storage or implement login itself. Its Axios fetch adapter
 bypasses the browser HTTP cache and blocks redirects. Backend `private, no-store`
 response headers and cross-origin header exposure still require server support.
-No API feature is invoked by the current application entry.
+Protected API requests use the session-owned Axios client.
