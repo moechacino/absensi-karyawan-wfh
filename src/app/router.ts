@@ -94,6 +94,14 @@ export const router = createBrowserRouter([
           ]),
           hr('HR_SCHEDULE_MANAGE', [
             { path: 'schedule', lazy: page('schedule/HrSchedulePage') },
+            {
+              path: 'schedule/edit',
+              lazy: page('schedule/ScheduleEditorPage'),
+            },
+            {
+              path: 'schedule/history',
+              lazy: page('schedule/ScheduleHistoryPage'),
+            },
           ]),
           hr('HR_HOLIDAYS_MANAGE', [
             { path: 'holidays', lazy: page('holidays/HrHolidayCalendarPage') },

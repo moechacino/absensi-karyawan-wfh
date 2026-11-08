@@ -1,6 +1,6 @@
 const allowed = [
   /^\/app(?:\/(?:attendance(?:\/[a-f\d-]{36})?|check-in|schedule|holidays|profile|password))?$/i,
-  /^\/hr\/(?:attendance(?:\/[a-f\d-]{36})?|employees(?:\/(?:new|[a-f\d-]{36}(?:\/edit)?))?|divisions|positions|schedule|holidays)$/i,
+  /^\/hr\/(?:attendance(?:\/[a-f\d-]{36})?|employees(?:\/(?:new|[a-f\d-]{36}(?:\/edit)?))?|divisions|positions|schedule(?:\/(?:edit|history))?|holidays)$/i,
 ]
 
 export function safeReturnPath(value: string | null | undefined): string {
