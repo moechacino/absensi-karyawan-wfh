@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useApi, useSession } from '../../shared/auth'
 import { isApiError } from '../../shared/api/problem'
 import { Button } from '../../shared/ui/Button'
@@ -14,6 +14,7 @@ import { PrivateImage } from '../files/PrivateImage'
 import { employeesApi } from './api'
 import type { Credentials, Employee } from './model'
 import { InitialCredentialsPanel } from './InitialCredentialsPanel'
+import { RoleChangeDialog } from './RoleChangeDialog'
 
 export default function EmployeeDetailPage() {
   const { employeeId = '' } = useParams()
@@ -22,6 +23,7 @@ export default function EmployeeDetailPage() {
 }
 
 function EmployeeRecord({ id }: { id: string }) {
+  const [roleOpen, setRoleOpen] = useState(false)
   const api = useApi(),
     { profile } = useSession()
   const [search] = useSearchParams()
@@ -58,12 +60,17 @@ function EmployeeRecord({ id }: { id: string }) {
             {employee.employeeCode}
           </p>
         </div>
-        <Link
-          className="min-h-13 rounded-control bg-action px-5 py-3 text-on-action"
-          to={`/hr/employees/${encodeURIComponent(employee.id)}/edit${search.size ? `?${search}` : ''}`}
-        >
-          Edit karyawan
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            className="inline-flex min-h-13 items-center rounded-control bg-action px-5 py-3 text-on-action"
+            to={`/hr/employees/${encodeURIComponent(employee.id)}/edit${search.size ? `?${search}` : ''}`}
+          >
+            Edit karyawan
+          </Link>
+          <Button variant="secondary" onClick={() => setRoleOpen(true)}>
+            Ubah peran
+          </Button>
+        </div>
       </header>
       <section className="flex flex-col gap-6 rounded-panel border border-border bg-surface p-5 sm:flex-row sm:p-6">
         <PrivateImage
@@ -108,7 +115,40 @@ function EmployeeRecord({ id }: { id: string }) {
         key={`${employee.id}:${employee.hasPasswordChanged}`}
         employee={employee}
       />
+      {roleOpen && (
+        <RoleChangeLauncher
+          employee={employee}
+          identity={profile?.id}
+          onClose={() => setRoleOpen(false)}
+        />
+      )}
     </div>
+  )
+}
+
+function RoleChangeLauncher({
+  employee,
+  identity,
+  onClose,
+}: {
+  employee: Employee
+  identity?: string
+  onClose: () => void
+}) {
+  const queryClient = useQueryClient()
+  return (
+    <RoleChangeDialog
+      key={`${employee.id}:${employee.version}`}
+      employee={employee}
+      open
+      onClose={onClose}
+      onSaved={(updated) =>
+        queryClient.setQueryData(
+          ['private', identity, 'employees', 'detail', updated.id],
+          updated,
+        )
+      }
+    />
   )
 }
 
