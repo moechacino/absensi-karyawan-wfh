@@ -1,5 +1,13 @@
 # Absensi Karyawan WFH — web
 
+
+- LIVE APP DEMO: https://wfh-attendance.forgetmenot.id
+- HR email and password: demo.hr01@example.test / Demo-Password-12345
+
+- LIVE API DEMO: https://wfh-attendance-api.forgetmenot.id/
+
+- API DOCS: https://documenter.getpostman.com/view/26325754/2sBYHYvdhX
+
 React + TypeScript + Vite application for employee attendance and HR self-service.
 The product task plan is in [web-tasks](../web-tasks/README.md), with the
 [completion checklist](../web-tasks/index.md).
