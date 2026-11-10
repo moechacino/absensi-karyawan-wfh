@@ -27,15 +27,16 @@ export default function PasswordPage() {
   const [input, setInput] = useState<PasswordInput>(empty)
   const [validation, setValidation] = useState<PasswordErrors>({})
   const [policyError, setPolicyError] = useState('')
+  const [profileRefreshFailed, setProfileRefreshFailed] = useState(false)
   const policy = profile?.passwordPolicy
   const command = useCommand<PasswordInput, undefined>({
     identity: profile?.id ?? null,
     idempotent: false,
     execute: (data, { signal }) => changePassword(api, data, signal),
-    onConfirmed: () => {
+    onConfirmed: async () => {
       setInput(empty)
-      clearSession()
-      navigate('/login?message=password-changed', { replace: true })
+      setValidation({})
+      await reloadProfile()
     },
   })
   const busy = command.status === 'submitting'
@@ -43,6 +44,14 @@ export default function PasswordPage() {
     command.status === 'uncertain' || command.status === 'in-progress'
   const errors = { ...passwordServerErrors(command.error), ...validation }
 
+  async function reloadProfile() {
+    setProfileRefreshFailed(false)
+    try {
+      await refreshProfile()
+    } catch {
+      setProfileRefreshFailed(true)
+    }
+  }
   function update(field: keyof PasswordInput, value: string) {
     if (busy || uncertain) return
     command.reset()
@@ -75,9 +84,22 @@ export default function PasswordPage() {
         </Link>
         <h1 className="text-heading font-medium">Ubah kata sandi</h1>
         <p className="text-text-muted">
-          Setelah perubahan berhasil, masuk kembali dengan kata sandi baru.
+          Ubah kata sandi akun Anda. Sesi saat ini tetap aktif setelah berhasil.
         </p>
       </div>
+      {command.status === 'confirmed' && (
+        <Alert title="Kata sandi berhasil diperbarui" tone="success">
+          Anda tetap masuk. Gunakan kata sandi baru saat masuk berikutnya.
+        </Alert>
+      )}
+      {profileRefreshFailed && (
+        <Alert title="Profil belum diperbarui" tone="warning">
+          <p>Kata sandi sudah tersimpan, tetapi profil terbaru belum dapat dimuat.</p>
+          <Button className="mt-3" variant="secondary" onClick={() => void reloadProfile()}>
+            Muat ulang profil
+          </Button>
+        </Alert>
+      )}
       {!validPasswordPolicy(policy) ? (
         <Alert title="Kebijakan kata sandi belum tersedia" tone="warning">
           <p>Form belum dapat dikirim hingga kebijakan perusahaan dimuat.</p>
@@ -121,9 +143,6 @@ export default function PasswordPage() {
               <p>
                 Periksa pesan pada kolom atau coba lagi setelah koneksi pulih.
               </p>
-              {command.error.requestId && (
-                <p>ID permintaan: {command.error.requestId}</p>
-              )}
             </Alert>
           )}
           <form

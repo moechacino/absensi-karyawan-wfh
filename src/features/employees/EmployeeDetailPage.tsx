@@ -138,7 +138,7 @@ function RoleChangeLauncher({
   const queryClient = useQueryClient()
   return (
     <RoleChangeDialog
-      key={`${employee.id}:${employee.version}`}
+      key={employee.id}
       employee={employee}
       open
       onClose={onClose}

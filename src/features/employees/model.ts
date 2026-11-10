@@ -1,8 +1,9 @@
-import type { components } from '../../shared/api/schema'
-import type { JsonBody } from '../../shared/api/types'
+import type { Employee, EmployeeCreate, InitialCredentials } from '../../shared/api/types'
+import { validatePhoto } from './editModel'
 
-export type Employee = components['schemas']['Employee']
-export type Credentials = components['schemas']['InitialCredentials']
+export type { Employee } from '../../shared/api/types'
+
+export type Credentials = InitialCredentials
 export type EmployeeDraft = {
   fullName: string
   email: string
@@ -56,10 +57,17 @@ export function validateEmployee(draft: EmployeeDraft): EmployeeErrors {
 export function creationPayload(
   draft: EmployeeDraft,
   confirmedHr: boolean,
-): JsonBody<'createEmployee'> {
+  photo: File | null = null,
+): EmployeeCreate {
   if (draft.role === 'HRD' && !confirmedHr)
     throw new Error('Konfirmasi akses HRD diperlukan.')
-  return { ...draft, ...(draft.role === 'HRD' && { confirmHrAccess: true }) }
+  const photoError = validatePhoto(photo)
+  if (photoError) throw new Error(photoError)
+  return {
+    ...draft,
+    ...(draft.role === 'HRD' && { confirmHrAccess: 'true' as const }),
+    ...(photo && { photo }),
+  }
 }
 
 export function createdEmployeeId(

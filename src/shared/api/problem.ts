@@ -1,9 +1,9 @@
+import type { FieldError, Problem } from './types'
 import axios, { AxiosHeaders } from 'axios'
 import type { RawAxiosHeaders } from 'axios'
-import type { components } from './schema'
 
-export type Problem = components['schemas']['Problem']
-export type FieldError = components['schemas']['FieldError']
+export type { Problem, FieldError } from './types'
+
 export type ApiErrorKind =
   | 'http'
   | 'network'

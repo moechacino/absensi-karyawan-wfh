@@ -1,5 +1,11 @@
+import type {
+  ScheduleChange,
+  ScheduleChanged,
+  ScheduleHistoryPage,
+  SchedulePreview,
+  TimeZoneChoices,
+} from '../../shared/api/types'
 import type { ApiClient } from '../../shared/api/client'
-import type { JsonBody, JsonResult } from '../../shared/api/types'
 
 export function searchTimeZones(
   api: ApiClient,
@@ -7,7 +13,7 @@ export function searchTimeZones(
   atDate: string,
   signal?: AbortSignal,
 ) {
-  return api.request<JsonResult<'searchTimeZones'>>({
+  return api.request<TimeZoneChoices>({
     path: '/reference/time-zones',
     params: { q, atDate },
     signal,
@@ -15,10 +21,10 @@ export function searchTimeZones(
 }
 export function previewWorkSchedule(
   api: ApiClient,
-  input: JsonBody<'previewWorkSchedule'>,
+  input: ScheduleChange,
   signal?: AbortSignal,
 ) {
-  return api.request<JsonResult<'previewWorkSchedule'>>({
+  return api.request<SchedulePreview>({
     path: '/hr/work-schedule/preview',
     method: 'POST',
     data: input,
@@ -27,11 +33,11 @@ export function previewWorkSchedule(
 }
 export function changeWorkSchedule(
   api: ApiClient,
-  input: JsonBody<'changeWorkSchedule'>,
+  input: ScheduleChange,
   idempotencyKey: string,
   signal?: AbortSignal,
 ) {
-  return api.request<JsonResult<'changeWorkSchedule'>>({
+  return api.request<ScheduleChanged>({
     path: '/hr/work-schedule',
     method: 'PUT',
     data: input,
@@ -44,7 +50,7 @@ export function listScheduleVersions(
   page: number,
   signal?: AbortSignal,
 ) {
-  return api.request<JsonResult<'listWorkScheduleVersions'>>({
+  return api.request<ScheduleHistoryPage>({
     path: '/hr/work-schedule/versions',
     params: { page, pageSize: 20 },
     signal,

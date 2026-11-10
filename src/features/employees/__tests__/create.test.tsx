@@ -79,6 +79,31 @@ beforeEach(() => {
 })
 
 describe('employee create command', () => {
+  it('submits an optional profile photo together with the employee fields', async () => {
+    mocks.request.mockResolvedValueOnce(result)
+    render(<Example />)
+    fireEvent.click(screen.getByRole('button', { name: 'Isi data uji' }))
+    const photo = new File(['photo'], 'profile.webp', { type: 'image/webp' })
+    fireEvent.change(screen.getByLabelText('Foto profil (opsional)'), { target: { files: [photo] } })
+    fireEvent.click(screen.getByRole('button', { name: 'Simpan karyawan' }))
+    await waitFor(() => expect(mocks.request).toHaveBeenCalledOnce())
+    const body = mocks.request.mock.calls[0][0].data
+    expect(body).toBeInstanceOf(FormData)
+    expect(body.get('photo')).toBe(photo)
+    expect(body.get('fullName')).toBe('Contoh')
+  })
+
+  it('blocks invalid photos before creating an employee', () => {
+    render(<Example />)
+    fireEvent.click(screen.getByRole('button', { name: 'Isi data uji' }))
+    fireEvent.change(screen.getByLabelText('Foto profil (opsional)'), {
+      target: { files: [new File(['pdf'], 'profile.pdf', { type: 'application/pdf' })] },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Simpan karyawan' }))
+    expect(mocks.request).not.toHaveBeenCalled()
+    expect(screen.getByText('Gunakan gambar JPEG, PNG, atau WebP.')).toBeInTheDocument()
+  })
+
   it('blocks double submit and retries uncertainty with the same key/body, then clears secrets without reopening create', async () => {
     let reject: (reason: unknown) => void = () => undefined
     mocks.request

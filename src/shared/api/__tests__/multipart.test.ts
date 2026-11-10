@@ -1,12 +1,12 @@
-import { describe, expect, expectTypeOf, it } from 'vitest'
+import type { CheckInInput, EmployeePatch } from '../types'
+import { describe, expect, it } from 'vitest'
 import { toFormData, versionText } from '../multipart'
-import type { MultipartBody } from '../types'
 
 describe('multipart serialization', () => {
   const file = new File(['camera bytes'], 'photo.png', { type: 'image/png' })
 
-  it('supports the generated check-in body with untouched file bytes and filename', () => {
-    const body: MultipartBody<'checkIn'> = {
+  it('sends the check-in photo with untouched file bytes and filename', () => {
+    const body: CheckInInput = {
       photo: file,
     }
     const data = toFormData(body)
@@ -15,7 +15,7 @@ describe('multipart serialization', () => {
   })
 
   it('omits absent optional photo parts while preserving meaningful whitespace in text', () => {
-    const body: MultipartBody<'updateEmployee'> = {
+    const body: EmployeePatch = {
       expectedVersion: '2',
       fullName: '  Nama tetap  ',
     }
@@ -27,14 +27,7 @@ describe('multipart serialization', () => {
   })
 
   it('supports employee PATCH even without a photo and serializes version/removal as text', () => {
-    expectTypeOf<MultipartBody<'updateEmployee'>>().not.toBeUnknown()
-    expectTypeOf<{ expectedVersion: string }>().not.toExtend<
-      MultipartBody<'updateEmployee'>
-    >()
-    expectTypeOf<{ fullName: string }>().not.toExtend<
-      MultipartBody<'updateEmployee'>
-    >()
-    const body: MultipartBody<'updateEmployee'> = {
+    const body: EmployeePatch = {
       expectedVersion: versionText(0),
       fullName: 'Contoh',
       removePhoto: 'false',

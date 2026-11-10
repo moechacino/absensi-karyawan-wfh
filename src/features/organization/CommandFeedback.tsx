@@ -36,9 +36,6 @@ export function CommandFeedback({
           Jangan membuat pengajuan baru.
         </p>
       )}
-      {error.requestId && (
-        <p className="font-mono text-label">ID permintaan: {error.requestId}</p>
-      )}
     </Alert>
   )
 }

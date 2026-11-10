@@ -1,11 +1,11 @@
+import type { Attendance, AttendanceDayPage } from '../../shared/api/types'
 import type { ApiClient } from '../../shared/api/client'
-import type { JsonResult } from '../../shared/api/types'
 export function listAttendanceDays(
   api: ApiClient,
   params: { from: string; to: string; page: number; pageSize: number },
   signal?: AbortSignal,
 ) {
-  return api.request<JsonResult<'listOwnAttendanceDays'>>({
+  return api.request<AttendanceDayPage>({
     path: '/me/attendance-days',
     params,
     signal,
@@ -16,7 +16,7 @@ export function getOwnAttendance(
   id: string,
   signal?: AbortSignal,
 ) {
-  return api.request<JsonResult<'getOwnAttendance'>>({
+  return api.request<Attendance>({
     path: `/me/attendances/${encodeURIComponent(id)}`,
     signal,
   })

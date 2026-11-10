@@ -1,6 +1,6 @@
-import type { components } from '../../shared/api/schema'
+import type { FileMetadata } from '../../shared/api/types'
 
-export type FileMetadata = components['schemas']['FileMetadata']
+export type { FileMetadata } from '../../shared/api/types'
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const imageTypes = new Set(['image/jpeg', 'image/png', 'image/webp'])
 

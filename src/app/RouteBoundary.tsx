@@ -1,3 +1,4 @@
+import type { Permission } from '../shared/api/types'
 import {
   Link,
   Navigate,
@@ -5,7 +6,6 @@ import {
   useLocation,
   useRouteError,
 } from 'react-router'
-import type { components } from '../shared/api/schema'
 import { useSession } from '../shared/auth'
 import { ErrorState, LoadingState } from '../shared/ui/Feedback'
 import { Button } from '../shared/ui/Button'
@@ -15,7 +15,7 @@ import { safeReturnPath } from '../shared/navigation/safeReturn'
 export function ProtectedRoute({
   permission,
 }: {
-  permission?: components['schemas']['Permission']
+  permission?: Permission
 }) {
   const session = useSession()
   const location = useLocation()

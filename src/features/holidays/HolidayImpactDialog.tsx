@@ -1,4 +1,4 @@
-import type { components } from '../../shared/api/schema'
+import type { ChangeImpact } from '../../shared/api/types'
 import type { ApiError } from '../../shared/api/problem'
 import { ConfirmationDialog } from '../../shared/ui/Dialog'
 import { Alert } from '../../shared/ui/Feedback'
@@ -17,7 +17,7 @@ export function HolidayImpactDialog({
   onConfirm,
   onRetry,
 }: {
-  impact: components['schemas']['ChangeImpact']
+  impact: ChangeImpact
   changes: HolidayChanges
   open: boolean
   busy: boolean

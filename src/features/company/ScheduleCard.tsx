@@ -1,4 +1,4 @@
-import type { components } from '../../shared/api/schema'
+import type { ScheduleVersion } from '../../shared/api/types'
 import { formatDate, formatTimestamp } from '../../shared/dates/format'
 import { Badge, EmptyState } from '../../shared/ui/Feedback'
 
@@ -15,7 +15,7 @@ export function ScheduleCard({
   schedule,
   title,
 }: {
-  schedule: components['schemas']['ScheduleVersion'] | null
+  schedule: ScheduleVersion | null
   title: string
 }) {
   if (!schedule)
@@ -41,6 +41,7 @@ export function ScheduleCard({
         )}
       </p>
       <p>{schedule.workingDays.map((day) => weekdays[day - 1]).join(', ')}</p>
+      <p className="text-small">Check-in dibuka {schedule.opensMinutesBeforeStart ?? 15} menit sebelum jam mulai.</p>
       <dl className="grid gap-3 text-small sm:grid-cols-2">
         <div>
           <dt className="text-text-muted">Zona waktu</dt>

@@ -18,7 +18,7 @@ const mocks = vi.hoisted(() => {
     navigate: vi.fn(),
     refresh: vi.fn(),
     policy: {
-      minLength: 4,
+      minLength: 8,
       maxLength: 20,
       requiresDifferentPassword: true,
     } as unknown,
@@ -76,7 +76,7 @@ vi.mock('../../files/PrivateFileViewer', () => ({
 
 beforeEach(() => {
   mocks.policy = {
-    minLength: 4,
+    minLength: 8,
     maxLength: 20,
     requiresDifferentPassword: true,
   }
@@ -85,6 +85,7 @@ beforeEach(() => {
   mocks.request.mockReset().mockResolvedValue(undefined)
   mocks.clear.mockClear()
   mocks.navigate.mockClear()
+  mocks.refresh.mockReset().mockResolvedValue(undefined)
 })
 function fill(
   current = 'old-password',
@@ -203,7 +204,7 @@ describe('password validation and error mapping', () => {
 })
 
 describe('password component', () => {
-  it('sends exact password values once and clears the session only after server confirmation', async () => {
+  it('sends exact password values once and keeps the session after server confirmation', async () => {
     let confirm: (() => void) | undefined
     mocks.request.mockImplementationOnce(
       () =>
@@ -235,13 +236,44 @@ describe('password component', () => {
     )
     expect(mocks.request).toHaveBeenCalledOnce()
     await act(async () => confirm!())
-    expect(mocks.clear).toHaveBeenCalledOnce()
-    expect(mocks.navigate).toHaveBeenCalledWith(
-      '/login?message=password-changed',
-      { replace: true },
-    )
+    expect(mocks.clear).not.toHaveBeenCalled()
+    expect(mocks.navigate).not.toHaveBeenCalled()
+    expect(mocks.refresh).toHaveBeenCalledOnce()
+    expect(screen.getByText('Kata sandi berhasil diperbarui')).toBeInTheDocument()
     expect(screen.getByLabelText(/^Kata sandi baru/)).toHaveValue('')
   })
+  it('shows the eight-character minimum, rejects seven, and submits exactly eight', async () => {
+    render(<PasswordPage />)
+    expect(screen.getByText(/Gunakan 8–20 karakter/)).toBeInTheDocument()
+    fill('old-password', '1234567')
+    await act(async () => fireEvent.submit(form()))
+    expect(mocks.request).not.toHaveBeenCalled()
+    expect(screen.getByLabelText(/^Kata sandi baru/)).toHaveAccessibleDescription('Gunakan 8–20 karakter.')
+    fill('old-password', '12345678')
+    await act(async () => fireEvent.submit(form()))
+    expect(mocks.request).toHaveBeenCalledOnce()
+    expect(mocks.request).toHaveBeenCalledWith(expect.objectContaining({
+      path: '/auth/password', method: 'POST',
+      data: { currentPassword: 'old-password', newPassword: '12345678', confirmPassword: '12345678' },
+    }))
+  })
+
+  it('keeps a confirmed password change successful when profile reload fails and retries only the profile read', async () => {
+    mocks.refresh.mockRejectedValueOnce(createApiError('network'))
+    render(<PasswordPage />)
+    fill()
+    await act(async () => fireEvent.submit(form()))
+    expect(screen.getByText('Kata sandi berhasil diperbarui')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Muat ulang profil' })).toBeInTheDocument()
+    expect(mocks.clear).not.toHaveBeenCalled()
+    expect(mocks.navigate).not.toHaveBeenCalled()
+    expect(screen.getByLabelText(/^Kata sandi baru/)).toHaveValue('')
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Muat ulang profil' })))
+    expect(mocks.refresh).toHaveBeenCalledTimes(2)
+    expect(mocks.request).toHaveBeenCalledOnce()
+    expect(screen.queryByRole('button', { name: 'Muat ulang profil' })).not.toBeInTheDocument()
+  })
+
   it('keeps values on domain failure and maps the wrong-current-password response inline', async () => {
     mocks.request.mockRejectedValueOnce(
       createApiError('http', {

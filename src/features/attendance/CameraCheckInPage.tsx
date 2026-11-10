@@ -1,10 +1,10 @@
+import type { CheckInInput } from '../../shared/api/types'
 import { useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useApi, useSession } from '../../shared/auth'
 import { invalidateGroup } from '../../shared/query/invalidation'
 import { useCommand } from '../../shared/commands/useCommand'
-import type { MultipartBody } from '../../shared/api/types'
 import { useHome } from '../home/api'
 import { homeView } from '../home/viewModel'
 import { useCamera } from './useCamera'
@@ -13,7 +13,7 @@ import { CommandNotice } from './CommandNotice'
 import { Button } from '../../shared/ui/Button'
 import { Alert, LoadingState } from '../../shared/ui/Feedback'
 import { QueryError } from '../../shared/ui/QueryFeedback'
-import { formatTimestamp } from '../../shared/dates/format'
+import { formatTimestamp, userTimeZone } from '../../shared/dates/format'
 
 export default function CameraCheckInPage() {
   const api = useApi(),
@@ -34,7 +34,7 @@ export default function CameraCheckInPage() {
     [captureError, setCaptureError] = useState<string | null>(null)
   const command = useCommand({
     identity: profile?.id ?? null,
-    execute: (input: MultipartBody<'checkIn'>, context) =>
+    execute: (input: CheckInInput, context) =>
       checkIn(api, input, context),
     onConfirmed: async () => {
       if (profile) await invalidateGroup(queries, profile.id, 'attendance')
@@ -95,7 +95,6 @@ export default function CameraCheckInPage() {
         <Alert title="Kehadiran telah tercatat" tone="success">
           {formatTimestamp(
             command.result.checkInAt,
-            command.result.schedule.timeZone,
           )}{' '}
           ·{' '}
           {command.result.punctuality === 'LATE' ? 'Terlambat' : 'Tepat waktu'}
@@ -117,6 +116,13 @@ export default function CameraCheckInPage() {
       <p className="text-text-muted">
         Foto langsung dikirim setelah diambil. Gunakan kamera perangkat Anda.
       </p>
+      {home.data.checkInWindow && (
+        <Alert title="Jendela check-in">
+          Dibuka {formatTimestamp(home.data.checkInWindow.opensAt)}; ditutup{' '}
+          {formatTimestamp(home.data.checkInWindow.closesAt)}. Keterlambatan dimulai setelah{' '}
+          {formatTimestamp(home.data.checkInWindow.deadlineAt)}. Zona waktu {userTimeZone()}.
+        </Alert>
+      )}
       {!homeView(home.data).checkIn && (
         <Alert title="Check-in belum tersedia">
           {homeView(home.data).reason}

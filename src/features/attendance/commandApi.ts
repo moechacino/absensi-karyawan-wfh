@@ -1,12 +1,12 @@
+import type { Attendance, CheckInInput } from '../../shared/api/types'
 import type { ApiClient } from '../../shared/api/client'
-import type { JsonResult, MultipartBody } from '../../shared/api/types'
 import { toFormData } from '../../shared/api/multipart'
 export function checkIn(
   api: ApiClient,
-  input: MultipartBody<'checkIn'>,
+  input: CheckInInput,
   context: { idempotencyKey?: string; signal: AbortSignal },
 ) {
-  return api.request<JsonResult<'checkIn'>>({
+  return api.request<Attendance>({
     path: '/me/attendances/check-in',
     method: 'POST',
     data: toFormData(input),
@@ -18,7 +18,7 @@ export function checkOut(
   input: { id: string; expectedVersion: number },
   context: { idempotencyKey?: string; signal: AbortSignal },
 ) {
-  return api.request<JsonResult<'checkOut'>>({
+  return api.request<Attendance>({
     path: `/me/attendances/${encodeURIComponent(input.id)}/check-out`,
     method: 'POST',
     data: { expectedVersion: input.expectedVersion },

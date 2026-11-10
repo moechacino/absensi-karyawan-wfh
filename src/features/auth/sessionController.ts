@@ -1,3 +1,4 @@
+import type { LoginInput, MeProfile } from '../../shared/api/types'
 import { createApiClient } from '../../shared/api/client'
 import type { ApiClientOptions } from '../../shared/api/client'
 import {
@@ -6,7 +7,6 @@ import {
   normalizeApiError,
 } from '../../shared/api/problem'
 import type { ApiError } from '../../shared/api/problem'
-import type { JsonBody, JsonResult } from '../../shared/api/types'
 import { authService } from './api'
 import {
   readStoredSession,
@@ -18,7 +18,7 @@ import type { StoredSession } from './sessionStorage'
 export type SessionStatus = 'loading' | 'authenticated' | 'anonymous' | 'error'
 export interface SessionSnapshot {
   status: SessionStatus
-  profile: JsonResult<'getOwnProfile'> | null
+  profile: MeProfile | null
   expiresAt: string | null
   error: ApiError | null
   reason: 'expired' | 'storage' | null
@@ -184,7 +184,7 @@ export function createSessionController({
     }
   }
 
-  async function login(input: JsonBody<'login'>) {
+  async function login(input: LoginInput) {
     invalidate()
     token = null
     const revision = generation
@@ -247,12 +247,12 @@ export function createSessionController({
   }
 
   async function logout() {
-    // Start revocation with the old token before clearing local state immediately.
-    const revocation = token
+    // Notify the API with the old token, then discard the local session immediately.
+    const notification = token
       ? service.logout().catch(() => undefined)
       : Promise.resolve()
     clearSession()
-    await revocation
+    await notification
   }
 
   return {

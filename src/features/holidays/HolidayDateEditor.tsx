@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { TextField } from '../../shared/forms/TextField'
 import { SelectField } from '../../shared/forms/SelectField'
 import { Button } from '../../shared/ui/Button'
@@ -32,8 +33,9 @@ export function HolidayDateEditor({
   onRestore: (date: string) => void
   onClose: () => void
 }) {
+  const [draft, setDraft] = useState(value)
   const dateError = holidayDateError(value.date, year, companyDate)
-  const nameError = value.name.trim()
+  const nameError = draft.name.trim()
     ? undefined
     : 'Nama hari libur wajib diisi.'
   const invalid = Boolean(dateError || nameError)
@@ -59,19 +61,19 @@ export function HolidayDateEditor({
       />
       <TextField
         label="Nama hari libur"
-        value={value.name}
+        value={draft.name}
         maxLength={160}
-        onChange={(event) => onSave({ ...value, name: event.target.value })}
+        onChange={(event) => setDraft({ ...draft, name: event.target.value })}
         error={nameError}
         hint="Nama mengikuti kalender tahunan perusahaan."
         disabled={locked || isRemoved || Boolean(dateError)}
       />
       <SelectField
         label="Kategori"
-        value={value.category}
+        value={draft.category}
         disabled={locked || isRemoved || Boolean(dateError)}
         onChange={(category) =>
-          onSave({ ...value, category: category as Holiday['category'] })
+          setDraft({ ...draft, category: category as Holiday['category'] })
         }
         options={Object.entries(categoryLabels).map(([category, label]) => ({
           value: category,
@@ -91,7 +93,10 @@ export function HolidayDateEditor({
           <Button
             variant="primary"
             disabled={locked || invalid}
-            onClick={() => onSave(value)}
+            onClick={() => {
+              onSave(draft)
+              onClose()
+            }}
           >
             Simpan tanggal dalam batch
           </Button>

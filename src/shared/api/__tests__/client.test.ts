@@ -1,8 +1,8 @@
+import type { LoginInput, LoginResult } from '../types'
 import { AxiosError, AxiosHeaders, CanceledError } from 'axios'
 import type { AxiosAdapter, InternalAxiosRequestConfig } from 'axios'
 import { describe, expect, it, vi } from 'vitest'
 import { createApiClient } from '../client'
-import type { JsonBody, JsonResult } from '../types'
 
 function harness() {
   const adapter = vi.fn<AxiosAdapter>(async (config) => ({
@@ -86,13 +86,13 @@ describe('Axios API boundary', () => {
     ).toEqual(['Bearer token-one', 'Bearer token-two', false])
   })
 
-  it('keeps login/explicit public requests anonymous and supports generated JSON bodies/results', async () => {
+  it('keeps login/explicit public requests anonymous and sends JSON request bodies', async () => {
     const { client, token, adapter } = harness()
-    const data: JsonBody<'login'> = {
+    const data: LoginInput = {
       email: 'contoh@example.test',
       password: '  unchanged  ',
     }
-    await client.request<JsonResult<'login'>>({
+    await client.request<LoginResult>({
       path: '/auth/login',
       method: 'POST',
       data,
@@ -163,7 +163,7 @@ describe('Axios API boundary', () => {
       statusText: '',
       headers: {},
     }))
-    const result: JsonResult<'logout'> = await client.request({
+    const result: undefined = await client.request({
       path: '/auth/logout',
       method: 'POST',
     })

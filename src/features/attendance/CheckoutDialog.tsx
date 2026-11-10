@@ -1,8 +1,8 @@
+import type { Attendance } from '../../shared/api/types'
 import { useEffect } from 'react'
 import { invalidateGroup } from '../../shared/query/invalidation'
 import { useQueryClient } from '@tanstack/react-query'
 import { useApi, useSession } from '../../shared/auth'
-import type { components } from '../../shared/api/schema'
 import { useCommand } from '../../shared/commands/useCommand'
 import { ConfirmationDialog } from '../../shared/ui/Dialog'
 import { CommandNotice } from './CommandNotice'
@@ -15,7 +15,7 @@ export function CheckoutDialog({
   onClose,
   onConfirmed,
 }: {
-  attendance: components['schemas']['Attendance']
+  attendance: Attendance
   open: boolean
   onClose: () => void
   onConfirmed: () => void
@@ -46,7 +46,7 @@ export function CheckoutDialog({
       description="Waktu selesai dicatat oleh server setelah konfirmasi."
       busy={command.status === 'submitting'}
       confirmLabel="Check-out sekarang"
-      confirmDisabled={locked}
+      confirmDisabled={locked || command.status === 'conflict' || attendance.state !== 'WORKING'}
       onClose={() => {
         if (!locked) {
           command.reset()
@@ -54,7 +54,7 @@ export function CheckoutDialog({
         }
       }}
       onConfirm={() => {
-        if (!locked)
+        if (!locked && command.status !== 'conflict' && attendance.state === 'WORKING')
           void command.run({
             id: attendance.id,
             expectedVersion: attendance.version,
@@ -64,7 +64,17 @@ export function CheckoutDialog({
       <p>Hari kerja {formatDate(attendance.workDate)}</p>
       <p>
         Check-in:{' '}
-        {formatTimestamp(attendance.checkInAt, attendance.schedule.timeZone)}
+        {formatTimestamp(attendance.checkInAt)}
+      </p>
+      <p>Jadwal selesai: {formatTimestamp(attendance.schedule.plannedEndAt)}.</p>
+      {attendance.checkOutDeadlineAt && (
+        <p>Check-out sebelum {formatTimestamp(attendance.checkOutDeadlineAt)}.</p>
+      )}
+      <p>
+        Sebelum jadwal selesai dicatat lebih awal (EARLY), tepat saat selesai sebagai
+        ON_TIME, dan setelahnya sebagai LATE. Check-out terlambat tetap diterima
+        sebelum pembukaan check-in shift kerja berikutnya, melewati hari istirahat
+        dan hari libur. Pada batas itu, catatan yang belum ditutup menjadi tidak check-out.
       </p>
       <CommandNotice
         status={command.status}

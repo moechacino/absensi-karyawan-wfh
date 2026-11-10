@@ -26,6 +26,14 @@ function problem(code: string, status = 409) {
 }
 
 describe('command controller', () => {
+  it('treats missed checkout as terminal until the record is reviewed', async () => {
+    const execute = vi.fn().mockRejectedValue(problem('MISSED_CHECK_OUT'))
+    const controller = createCommand({ identity: 'one', execute })
+    await controller.run({ id: 'attendance', expectedVersion: 1 })
+    expect(controller.getState().status).toBe('conflict')
+    await controller.retry()
+    expect(execute).toHaveBeenCalledOnce()
+  })
   it('deduplicates clicks, freezes a snapshot and confirms only after the server', async () => {
     const request = deferred<{ id: string }>()
     const execute = vi.fn(

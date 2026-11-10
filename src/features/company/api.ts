@@ -1,8 +1,8 @@
+import type { HolidayCalendar, WorkSchedule } from '../../shared/api/types'
 import type { ApiClient } from '../../shared/api/client'
-import type { JsonResult } from '../../shared/api/types'
 
 export function getWorkSchedule(api: ApiClient, signal?: AbortSignal) {
-  return api.request<JsonResult<'getWorkSchedule'>>({
+  return api.request<WorkSchedule>({
     path: '/work-schedule',
     signal,
   })
@@ -12,7 +12,7 @@ export function getHolidayCalendar(
   year: number,
   signal?: AbortSignal,
 ) {
-  return api.request<JsonResult<'getHolidayCalendar'>>({
+  return api.request<HolidayCalendar>({
     path: '/holidays',
     params: { year },
     signal,

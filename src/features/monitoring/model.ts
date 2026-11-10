@@ -1,12 +1,11 @@
-import { isDateOnly } from '../../shared/dates/format'
+import type { MonitoringPage, MonitoringRow } from '../../shared/api/types'
+import { isDateOnly, userTimeZone } from '../../shared/dates/format'
 import { statusLabels } from '../home/viewModel'
-import type { components } from '../../shared/api/schema'
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const punctualities = ['ON_TIME', 'LATE'] as const
 
-type MonitoringRow = components['schemas']['MonitoringRow']
-type MonitoringSummary = components['schemas']['MonitoringPage']['summary']
+type MonitoringSummary = MonitoringPage['summary']
 
 export function monitoringFilters(
   params: URLSearchParams,
@@ -45,7 +44,7 @@ export function monitoringFilters(
   }
 }
 
-/** Late overlaps WORKING/COMPLETED, so exclusive totals sum statuses only. */
+/** Late overlaps recorded attendance, so exclusive totals sum statuses only. */
 export function summaryCards(summary: MonitoringSummary) {
   return [
     {
@@ -54,12 +53,14 @@ export function summaryCards(summary: MonitoringSummary) {
         summary.notCheckedIn +
         summary.working +
         summary.completed +
+        summary.missedCheckOut +
         summary.holiday +
         summary.restDay +
         summary.unconfigured,
     },
     { label: 'Sedang bekerja', value: summary.working },
     { label: 'Selesai', value: summary.completed },
+    { label: 'Tidak check-out', value: summary.missedCheckOut },
     { label: 'Belum check-in', value: summary.notCheckedIn },
     { label: 'Terlambat', value: summary.late },
     { label: 'Hari libur', value: summary.holiday },
@@ -76,7 +77,7 @@ export function monitoringRowView(row: MonitoringRow) {
     divisionName: row.employee.division.name,
     status: statusLabels[row.day.status],
     attendanceId: attendance?.id,
-    timeZone: attendance?.schedule.timeZone ?? row.day.schedule?.timeZone,
+    timeZone: userTimeZone(),
     checkInAt: attendance?.checkInAt ?? null,
     checkOutAt: attendance?.checkOutAt ?? null,
     punctuality: attendance?.punctuality,

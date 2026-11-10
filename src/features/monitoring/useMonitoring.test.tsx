@@ -1,3 +1,4 @@
+import type { MonitoringPage } from '../../shared/api/types'
 import {
   QueryClient,
   QueryClientProvider,
@@ -7,14 +8,14 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { createElement, type PropsWithChildren } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import type { ApiClient } from '../../shared/api/client'
-import type { components } from '../../shared/api/schema'
 import { monitoringFilters } from './model'
 import { useMonitoring } from './useMonitoring'
 
-const page: components['schemas']['MonitoringPage'] = {
+const page: MonitoringPage = {
   items: [],
   pagination: { page: 1, pageSize: 20, totalItems: 0, totalPages: 0 },
   summary: {
+    missedCheckOut: 0,
     notCheckedIn: 0,
     working: 0,
     completed: 0,

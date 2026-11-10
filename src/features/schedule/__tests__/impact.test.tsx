@@ -13,6 +13,7 @@ const preview: SchedulePreview = {
     endDayOffset: 0,
     timeZone: 'Asia/Jakarta',
     effectiveFrom: '2026-11-16',
+    opensMinutesBeforeStart: 45,
   },
   activationMode: 'ON_SAVE',
   effectiveAt: null,
@@ -58,6 +59,7 @@ describe('schedule impact review', () => {
     )
     const save = screen.getByRole('button', { name: 'Simpan jadwal' })
     expect(save).toBeDisabled()
+    expect(screen.getByText('Check-in dibuka 45 menit sebelum jam mulai.')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('checkbox'))
     fireEvent.click(save)
     expect(confirm).toHaveBeenCalledOnce()

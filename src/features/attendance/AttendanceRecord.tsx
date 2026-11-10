@@ -1,21 +1,23 @@
+import { CheckoutSummary } from './CheckoutSummary'
+import type { Attendance } from '../../shared/api/types'
 import { useState } from 'react'
 import { PrivateFileViewer } from '../files/PrivateFileViewer'
 import { Button } from '../../shared/ui/Button'
-import type { components } from '../../shared/api/schema'
 import {
   formatDate,
   formatDuration,
   formatTimestamp,
+  userTimeZone,
 } from '../../shared/dates/format'
-import { Badge } from '../../shared/ui/Feedback'
+import { Alert, Badge } from '../../shared/ui/Feedback'
 import { PrivateImage } from '../files/PrivateImage'
 export function AttendanceRecord({
   record,
 }: {
-  record: components['schemas']['Attendance']
+  record: Attendance
 }) {
   const [open, setOpen] = useState(false)
-  const zone = record.schedule.timeZone
+  const zone = userTimeZone()
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -30,8 +32,8 @@ export function AttendanceRecord({
         {[
           ['Check-in', formatTimestamp(record.checkInAt, zone)],
           ['Check-out', formatTimestamp(record.checkOutAt, zone)],
-          ['Durasi tercatat', formatDuration(record.durationSeconds)],
-          ['Zona waktu rekaman', zone],
+          ['Durasi tercatat', record.state === 'MISSED_CHECK_OUT' ? 'Tidak tersedia' : formatDuration(record.durationSeconds)],
+          ['Zona waktu tampilan', zone],
           [
             'Jadwal mulai',
             formatTimestamp(record.schedule.plannedStartAt, zone),
@@ -47,6 +49,12 @@ export function AttendanceRecord({
           </div>
         ))}
       </dl>
+      <CheckoutSummary attendance={record} />
+      {record.state === 'MISSED_CHECK_OUT' && (
+        <Alert title="Tidak check-out" tone="warning">
+          Batas check-out pada pembukaan shift kerja berikutnya telah lewat. Waktu check-out dan durasi tidak dicatat otomatis.
+        </Alert>
+      )}
       <section className="space-y-3">
         <h2 className="text-title">Foto check-in</h2>
         <PrivateImage
@@ -64,8 +72,7 @@ export function AttendanceRecord({
         onClose={() => setOpen(false)}
       />
       <p className="text-small text-text-muted">
-        Jadwal dan zona waktu merupakan snapshot pada saat kehadiran dicatat.
-        Catatan ini tidak dapat diedit.
+        Catatan ini memakai jadwal yang tersimpan saat check-in. Waktu ditampilkan dalam zona perangkat Anda ({zone}).
       </p>
     </div>
   )

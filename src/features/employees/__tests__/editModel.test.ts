@@ -91,7 +91,7 @@ describe('employee profile and role command boundaries', () => {
     ).toThrow('tidak dapat digabungkan')
   })
 
-  it('requires role confirmation, uses a separate versioned body, and clears only revoked own access', () => {
+  it('requires role confirmation, uses a separate versioned body, and clears own access after role changes', () => {
     expect(() => rolePayload('HRD', 8, false)).toThrow('Konfirmasi')
     expect(rolePayload('HRD', 8, true)).toEqual({
       role: 'HRD',
@@ -103,6 +103,9 @@ describe('employee profile and role command boundaries', () => {
       expectedVersion: 8,
       confirmHrAccess: false,
     })
+    expect(
+      invalidatesOwnSession(employee.id, employee, { ...employee, role: 'HRD' }),
+    ).toBe(true)
     expect(
       invalidatesOwnSession(
         employee.id,
@@ -124,7 +127,7 @@ describe('employee profile and role command boundaries', () => {
     ).toBe(false)
   })
 
-  it('keeps PATCH multipart and role PUT as separate generated operations', async () => {
+  it('keeps PATCH multipart and role PUT as separate requests', async () => {
     const request = vi.fn().mockResolvedValue(employee)
     const api = { request } as unknown as ApiClient
     await employeeEditApi(api).profile(

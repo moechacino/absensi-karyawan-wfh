@@ -1,9 +1,10 @@
-import type { components } from '../../shared/api/schema'
+import type { ScheduleChange, SchedulePreview, WorkSchedule } from '../../shared/api/types'
 import { intentFingerprint } from '../../shared/commands/snapshot'
 import { isDateOnly } from '../../shared/dates/format'
 
-export type ScheduleInput = components['schemas']['ScheduleChange']
-export type SchedulePreview = components['schemas']['SchedulePreview']
+export type { SchedulePreview } from '../../shared/api/types'
+
+export type ScheduleInput = ScheduleChange
 export const weekdays = [
   'Senin',
   'Selasa',
@@ -19,6 +20,11 @@ const minutes = (time: string) =>
 
 export function validateSchedule(input: ScheduleInput): Record<string, string> {
   const errors: Record<string, string> = {}
+  if (
+    !Number.isInteger(input.opensMinutesBeforeStart) ||
+    input.opensMinutesBeforeStart < 0 || input.opensMinutesBeforeStart > 1440
+  )
+    errors.opensMinutesBeforeStart = 'Isi bilangan bulat antara 0 dan 1440 menit.'
   if (
     !input.workingDays.length ||
     new Set(input.workingDays).size !== input.workingDays.length ||
@@ -47,7 +53,7 @@ export function validateSchedule(input: ScheduleInput): Record<string, string> {
 }
 
 export function initialSchedule(
-  model: components['schemas']['WorkSchedule'],
+  model: WorkSchedule,
 ): ScheduleInput {
   const source = model.upcoming ?? model.current
   return {
@@ -58,6 +64,7 @@ export function initialSchedule(
     endDayOffset: source?.endDayOffset ?? 0,
     timeZone: source?.timeZone ?? '',
     effectiveFrom: '',
+    opensMinutesBeforeStart: source?.opensMinutesBeforeStart ?? 15,
   }
 }
 

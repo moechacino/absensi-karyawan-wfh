@@ -1,5 +1,5 @@
+import type { HolidayCalendar } from '../../../shared/api/types'
 import { describe, expect, it } from 'vitest'
-import type { components } from '../../../shared/api/schema'
 import {
   batchIsDirty,
   calendarMonth,
@@ -13,7 +13,7 @@ import {
   validateHolidayBatch,
 } from '../batchState'
 
-const base: components['schemas']['HolidayCalendar'] = {
+const base: HolidayCalendar = {
   year: 2026,
   version: 4,
   items: [

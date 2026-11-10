@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { CheckoutSummary } from '../attendance/CheckoutSummary'
 import { Link } from 'react-router'
 import { useSession } from '../../shared/auth'
 import { useHome } from './api'
@@ -8,6 +8,9 @@ import {
   formatDate,
   formatDuration,
   formatTime,
+  formatLocalDate,
+  formatTimestamp,
+  userTimeZone,
 } from '../../shared/dates/format'
 import { Alert, Badge, LoadingState } from '../../shared/ui/Feedback'
 import { QueryError } from '../../shared/ui/QueryFeedback'
@@ -19,26 +22,16 @@ export default function EmployeeHomePage() {
     query = useHome()
   const clock = useServerClock(query.data?.serverNow)
   const data = query.data
-  const refreshHome = query.refetch
-  useEffect(() => {
-    if (!data?.checkInWindow) return
-    const server = Date.parse(data.serverNow)
-    const next = [data.checkInWindow.opensAt, data.checkInWindow.closesAt]
-      .map(Date.parse)
-      .filter((time) => time > server)
-      .sort((a, b) => a - b)[0]
-    if (!next) return
-    const timer = window.setTimeout(
-      () => void refreshHome(),
-      Math.min(next - server + 50, 2_147_000_000),
-    )
-    return () => clearTimeout(timer)
-  }, [data, refreshHome])
   if (query.isPending) return <LoadingState />
   if (query.isError || !data)
     return <QueryError error={query.error} retry={() => void query.refetch()} />
   const view = homeView(data),
     attendance = data.day.attendance
+  const schedule = data.day.schedule
+  const formatScheduleTime = schedule &&
+    formatLocalDate(schedule.plannedStartAt) === formatLocalDate(schedule.plannedEndAt)
+    ? formatTime
+    : formatTimestamp
   return (
     <div className="space-y-6">
       <div>
@@ -46,7 +39,8 @@ export default function EmployeeHomePage() {
           Selamat datang, {profile?.fullName}
         </p>
         <h1 className="mt-2 text-heading font-medium">Absensi hari ini</h1>
-        <p className="mt-2 text-text-muted">{formatDate(view.workDate)}</p>
+        <p className="mt-2 text-text-muted">{formatLocalDate(clock ?? data.serverNow)}</p>
+        <p className="mt-2 text-small text-text-muted">Hari kerja: {formatDate(view.workDate)}</p>
         {view.workDate !== data.companyDate && (
           <p className="mt-2 text-small">
             Menampilkan hari kerja dari kehadiran yang masih terbuka.
@@ -56,29 +50,35 @@ export default function EmployeeHomePage() {
       <section className="space-y-5 rounded-panel bg-forest p-6 text-white">
         <p className="flex items-center gap-2 text-small">
           <Icon name="clock" />
-          Waktu server · {data.timeZone}
+          Waktu Anda · {userTimeZone()}
         </p>
         <p className="break-words font-mono text-clock tracking-wider">
-          {formatTime(clock ?? data.serverNow, data.timeZone, true)}
+          {formatTime(clock ?? data.serverNow, undefined, true)}
         </p>
         <p className="text-title">{view.title}</p>
         {data.day.schedule && (
           <div className="flex flex-wrap justify-between gap-3 border-t border-white/20 pt-4 text-small">
             <span>Jadwal kerja</span>
             <span className="font-mono">
-              {formatTime(
-                data.day.schedule.plannedStartAt,
-                data.day.schedule.timeZone,
-              )}
+              {formatScheduleTime(data.day.schedule.plannedStartAt)}
               –
-              {formatTime(
-                data.day.schedule.plannedEndAt,
-                data.day.schedule.timeZone,
-              )}
+              {formatScheduleTime(data.day.schedule.plannedEndAt)}
             </span>
           </div>
         )}
       </section>
+      {data.checkInWindow && (!attendance || attendance.state === 'MISSED_CHECK_OUT') && (
+        <Alert title="Waktu check-in">
+          Dibuka {formatTimestamp(data.checkInWindow.opensAt)}. Tepat waktu hingga{' '}
+          {formatTimestamp(data.checkInWindow.deadlineAt)}; ditutup{' '}
+          {formatTimestamp(data.checkInWindow.closesAt)}. Zona waktu {userTimeZone()}.
+        </Alert>
+      )}
+      {attendance?.state === 'MISSED_CHECK_OUT' && (
+        <Alert title="Tidak check-out" tone="warning">
+          Batas check-out pada pembukaan shift kerja berikutnya telah lewat. Catatan ini tidak dapat ditutup dan tidak menghalangi shift berikutnya.
+        </Alert>
+      )}
       {query.isFetching && (
         <p role="status" className="text-small text-text-muted">
           Memperbarui status…
@@ -117,19 +117,17 @@ export default function EmployeeHomePage() {
             <div>
               <dt className="text-small text-text-muted">Check-in</dt>
               <dd className="font-mono">
-                {formatTime(attendance.checkInAt, attendance.schedule.timeZone)}
+                {formatTimestamp(attendance.checkInAt)}
               </dd>
             </div>
             <div>
               <dt className="text-small text-text-muted">Check-out</dt>
               <dd className="font-mono">
-                {formatTime(
-                  attendance.checkOutAt,
-                  attendance.schedule.timeZone,
-                )}
+                {formatTimestamp(attendance.checkOutAt)}
               </dd>
             </div>
           </dl>
+          <CheckoutSummary attendance={attendance} />
           <Link
             className="block text-action underline"
             to={`/app/attendance/${attendance.id}`}

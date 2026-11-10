@@ -1,3 +1,4 @@
+import type { LoginResult, MeProfile } from '../../../shared/api/types'
 import { AxiosError, AxiosHeaders } from 'axios'
 import type { AxiosAdapter, InternalAxiosRequestConfig } from 'axios'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -7,11 +8,10 @@ import {
   SESSION_KEY,
   writeStoredSession,
 } from '../sessionStorage'
-import type { JsonResult } from '../../../shared/api/types'
 
 const now = Date.parse('2026-11-08T00:00:00Z')
 const expiresAt = new Date(now + 3_600_000).toISOString()
-const profile: JsonResult<'getOwnProfile'> = {
+const profile: MeProfile = {
   id: 'employee-one',
   fullName: 'Contoh Karyawan',
   division: { id: 'division', name: 'Engineering', code: 'ENG' },
@@ -26,12 +26,12 @@ const profile: JsonResult<'getOwnProfile'> = {
   permissions: [],
   photo: null,
   passwordPolicy: {
-    minLength: 15,
+    minLength: 8,
     maxLength: 128,
     requiresDifferentPassword: true,
   },
 }
-const loginResult: JsonResult<'login'> = {
+const loginResult: LoginResult = {
   accessToken: 'private-token',
   tokenType: 'Bearer',
   expiresIn: 3600,

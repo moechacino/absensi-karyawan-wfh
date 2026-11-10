@@ -1,3 +1,4 @@
+import type { RoleChange } from '../../shared/api/types'
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useApi, useSession } from '../../shared/auth'
@@ -6,13 +7,11 @@ import { SelectField } from '../../shared/forms/SelectField'
 import { Button } from '../../shared/ui/Button'
 import { Dialog } from '../../shared/ui/Dialog'
 import { Alert } from '../../shared/ui/Feedback'
-import { CommandFeedback } from '../organization/CommandFeedback'
 import { employeesApi } from './api'
 import { employeeEditApi } from './editApi'
 import { invalidateGroup } from '../../shared/query/invalidation'
 import { invalidatesOwnSession, rolePayload } from './editModel'
 import type { Employee } from './model'
-import type { JsonBody } from '../../shared/api/types'
 
 export function RoleChangeDialog({
   employee,
@@ -33,35 +32,42 @@ export function RoleChangeDialog({
   const [confirmed, setConfirmed] = useState(false)
   const [reviewing, setReviewing] = useState(false)
   const [reviewNotice, setReviewNotice] = useState('')
-  const command = useCommand<JsonBody<'changeEmployeeRole'>, Employee>({
+  async function accept(result: Employee) {
+    // Clear revoked own access before publishing cache updates that can unmount us.
+    if (
+      session.profile &&
+      invalidatesOwnSession(session.profile.id, base, result)
+    ) {
+      session.clearSession()
+      onClose()
+      return
+    }
+    onSaved(result)
+    if (session.profile) {
+      await invalidateGroup(cache, session.profile.id, 'employees')
+      await invalidateGroup(cache, session.profile.id, 'permissions')
+    }
+    onClose()
+  }
+  const command = useCommand<RoleChange, Employee>({
     identity: session.profile?.id ?? null,
     idempotent: false,
     execute: (body, { signal }) =>
       employeeEditApi(api).role(employee.id, body, signal),
-    onConfirmed: async (result) => {
-      onSaved(result)
-      if (
-        session.profile &&
-        invalidatesOwnSession(session.profile.id, base, result)
-      ) {
-        session.clearSession()
-        return
-      }
-      if (session.profile) {
-        await invalidateGroup(cache, session.profile.id, 'employees')
-        await invalidateGroup(cache, session.profile.id, 'permissions')
-      }
-      onClose()
-    },
+    onConfirmed: accept,
   })
   const busy = command.status === 'submitting'
-  const locked =
-    busy || command.status === 'uncertain' || command.status === 'in-progress'
+  const uncertain = ['uncertain', 'in-progress'].includes(command.status)
+  const locked = busy || uncertain || reviewing
   const conflict = command.status === 'conflict'
   async function review() {
     setReviewing(true)
     try {
       const latest = await employeesApi(api).detail(employee.id)
+      if (uncertain && latest.role === role) {
+        await accept(latest)
+        return
+      }
       setBase(latest)
       setConfirmed(false)
       command.reset()
@@ -101,8 +107,9 @@ export function RoleChangeDialog({
           {role === 'HRD'
             ? 'Akun mendapat kewenangan mengelola karyawan, organisasi, kalender dan jadwal serta melihat absensi.'
             : 'Akun kehilangan kewenangan HRD. Jika ini akun Anda, sesi saat ini akan diakhiri setelah server mengonfirmasi.'}{' '}
-          Sesi ini akan berakhir setelah server mengonfirmasi perubahan. Sesi
-          lain dapat tetap aktif sampai tokennya kedaluwarsa.
+          {employee.id === session.profile?.id
+            ? 'Anda perlu masuk kembali setelah peran akun Anda berubah.'
+            : 'Pastikan pemilik akun mengetahui perubahan aksesnya.'}
         </Alert>
         <label className="flex min-h-touch items-center gap-3">
           <input
@@ -114,13 +121,24 @@ export function RoleChangeDialog({
           />
           Saya memahami dan menyetujui perubahan akses ini.
         </label>
-        <CommandFeedback
-          status={command.status}
-          error={command.error}
-          onRetry={() => void command.retry()}
-        />
+        {command.error && (
+          <Alert
+            title={uncertain ? 'Periksa hasil perubahan peran' : 'Peran belum disimpan'}
+            tone="warning"
+          >
+            <p>{command.error.problem?.detail ?? command.error.message}</p>
+            {uncertain && (
+              <p>Muat peran terbaru sebelum mencoba menyimpan kembali.</p>
+            )}
+          </Alert>
+        )}
+        {command.refreshError && (
+          <Alert title="Peran tersimpan; penyegaran belum selesai" tone="warning">
+            Muat ulang detail karyawan sebelum melakukan perubahan lain.
+          </Alert>
+        )}
 
-        {conflict && (
+        {(conflict || uncertain) && (
           <Button
             busy={reviewing}
             variant="secondary"

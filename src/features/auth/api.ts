@@ -1,19 +1,19 @@
+import type { LoginInput, LoginResult, MeProfile } from '../../shared/api/types'
 import type { ApiClient } from '../../shared/api/client'
-import type { JsonBody, JsonResult } from '../../shared/api/types'
 
 export function authService(api: ApiClient) {
   return {
-    login: (data: JsonBody<'login'>, signal?: AbortSignal) =>
-      api.request<JsonResult<'login'>>({
+    login: (data: LoginInput, signal?: AbortSignal) =>
+      api.request<LoginResult>({
         path: '/auth/login',
         method: 'POST',
         data,
         signal,
       }),
     me: (signal?: AbortSignal) =>
-      api.request<JsonResult<'getOwnProfile'>>({ path: '/me', signal }),
+      api.request<MeProfile>({ path: '/me', signal }),
     logout: () =>
-      api.request<JsonResult<'logout'>>({
+      api.request<undefined>({
         path: '/auth/logout',
         method: 'POST',
       }),

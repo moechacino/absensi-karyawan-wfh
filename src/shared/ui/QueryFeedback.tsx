@@ -13,11 +13,6 @@ export function QueryError({
       {isApiError(error)
         ? error.message
         : 'Data belum dapat dimuat. Coba kembali.'}
-      {isApiError(error) && error.requestId && (
-        <p className="mt-2 break-all text-label">
-          ID permintaan: {error.requestId}
-        </p>
-      )}
     </ErrorState>
   )
 }

@@ -1,10 +1,12 @@
+import { CheckoutSummary } from './CheckoutSummary'
+import type { AttendanceDay } from '../../shared/api/types'
 import { Link } from 'react-router'
-import type { components } from '../../shared/api/schema'
 import { statusLabels } from '../home/viewModel'
 import {
   formatDate,
   formatDuration,
-  formatTime,
+  formatTimestamp,
+  userTimeZone,
 } from '../../shared/dates/format'
 import { Badge } from '../../shared/ui/Feedback'
 export function AttendanceDayCard({
@@ -12,7 +14,7 @@ export function AttendanceDayCard({
   detailPath,
   returnTo,
 }: {
-  day: components['schemas']['AttendanceDay']
+  day: AttendanceDay
   detailPath: string
   returnTo: string
 }) {
@@ -21,22 +23,23 @@ export function AttendanceDayCard({
     <div className="space-y-3">
       <div className="flex flex-wrap justify-between gap-2">
         <p className="font-medium">{formatDate(day.workDate)}</p>
-        <Badge tone={record?.state === 'COMPLETED' ? 'success' : 'neutral'}>
+        <Badge tone={record?.state === 'MISSED_CHECK_OUT' ? 'warning' : record?.state === 'COMPLETED' ? 'success' : 'neutral'}>
           {statusLabels[day.status]}
         </Badge>
       </div>
       {record ? (
         <>
           <p>
-            {formatTime(record.checkInAt, record.schedule.timeZone)} –{' '}
-            {formatTime(record.checkOutAt, record.schedule.timeZone)} ·{' '}
-            {record.schedule.timeZone}
+            {formatTimestamp(record.checkInAt)} –{' '}
+            {formatTimestamp(record.checkOutAt)} ·{' '}
+            {userTimeZone()}
           </p>
           <p className="text-small text-text-muted">
             {record.punctuality === 'LATE'
               ? `Terlambat ${formatDuration(record.lateSeconds)}`
               : 'Tepat waktu'}
           </p>
+          <CheckoutSummary attendance={record} />
           <Link
             className="inline-flex min-h-touch items-center text-action underline"
             to={`${detailPath}/${record.id}?returnTo=${encodeURIComponent(returnTo)}`}

@@ -1,19 +1,45 @@
 # API client
 
-This folder holds the generated API types and one Axios client.
+This folder holds a regular Axios client and handwritten request/response interfaces.
+Feature services call the client with explicit URLs, HTTP methods, and request data.
 
-## Keep types current
+The active contract is OpenAPI 0.8.5, covering the 32 requests in the live API
+collection. Employee creation and information updates use multipart (also when
+no photo is selected). Role changes use a separate JSON PUT with numeric
+`expectedVersion` and boolean `confirmHrAccess`; information updates send the
+version as decimal form text and never include a role or password.
 
-`schema.d.ts` and the files in `generated/` come from `../contracts/openapi.json`.
-After a contract change, run:
+Employee creation and information updates retain their idempotency key and
+original fields/file across uncertain retries. Role changes have no idempotency
+key: the UI reads the latest employee after an uncertain outcome before allowing
+another confirmed write. A version conflict preserves local inputs for review.
+Photo removal remains proposed in the API documentation and is not exposed.
 
-```sh
-npm run api:generate
-npm run api:check
-```
+Schedules send `opensMinutesBeforeStart` as an integer from 0 to 1440; new forms
+default to 15 and existing versions retain their own allowance. Preview and save
+send the same value. Attendance uses the server's `canCheckIn`, `canCheckOut`, and
+absolute check-in window rather than calculating eligibility from the device clock.
+Home, attendance details, and monitoring refresh at check-in window and checkout deadline boundaries.
 
-The build runs `api:check` automatically. Do not edit generated files by hand.
-The generated types describe expected data; they do not validate server replies.
+Home and attendance timestamps display in the device timezone. Date-only work
+dates remain business calendar labels. An overnight record keeps its starting
+work date. `MISSED_CHECK_OUT` is a terminal record state with null check-out/duration;
+the UI shows a warning and prevents checkout retries after that server rejection.
+Checkout remains available after planned end until the server's `checkOutDeadlineAt`,
+the next working shift's check-in opening (rest days/holidays skipped). The client
+never derives that cutoff from planned end or computes the next working date.
+`checkOutPunctuality` displays EARLY/ON_TIME/LATE independently of check-in
+punctuality; `earlyCheckOutSeconds` displays early departure duration. The original
+attendance ID and expected version are sent on checkout, including late checkout.
+Monitoring supports its status filter and `missedCheckOut` summary count. No
+checkout grace-period setting is exposed.
+
+## Data types
+
+`types.ts` exports plain interfaces from `models/`, grouped into common data,
+accounts, calendar, and attendance. Maintain these alongside feature requests
+when API behavior changes. There is no code generation, operation-ID lookup, or
+build dependency on an OpenAPI file. TypeScript types do not validate server replies.
 
 ## Make a request
 
@@ -23,16 +49,12 @@ The client returns the response body directly. A 204 response returns `undefined
 
 ```ts
 export function getHome(api: ApiClient, signal?: AbortSignal) {
-  return api.request<JsonResult<'getEmployeeHome'>>({
+  return api.request<Home>({
     path: '/me/home',
     signal,
   })
 }
 ```
-
-`JsonBody`, `MultipartBody`, and `JsonResult` list the request and response types
-for each operation in `types.ts`. For example, `JsonBody<'login'>` is the login
-form. These names are based on the OpenAPI operation ID.
 
 The client reads the current JWT through a function supplied by the session.
 Login is anonymous. Other requests use the current token. A 401 for that same
@@ -41,15 +63,16 @@ changes clear session state in the auth feature.
 
 ## Multipart requests
 
-Use `toFormData` for the two active file uploads: check-in photo and employee
-profile photo. It keeps Blob bytes, omits null/undefined values, and writes
+Use `toFormData` for employee creation, employee profile updates, and check-in,
+including employee requests without a photo. It keeps Blob bytes, omits null/undefined values, and writes
 strings, booleans, and numbers as text. Use `versionText` for the employee
 multipart version field. The client leaves the multipart Content-Type boundary
 to the browser.
 
 ```ts
-const data = toFormData<MultipartBody<'checkIn'>>({ photo })
-return api.request<JsonResult<'checkIn'>>({
+const body: CheckInInput = { photo }
+const data = toFormData(body)
+return api.request<Attendance>({
   path: '/me/attendances/check-in',
   method: 'POST',
   data,

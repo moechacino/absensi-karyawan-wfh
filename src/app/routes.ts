@@ -1,7 +1,6 @@
-import type { components } from '../shared/api/schema'
+import type { Permission } from '../shared/api/types'
 import type { IconName } from '../shared/icons/Icon'
 
-type Permission = components['schemas']['Permission']
 export interface NavigationItem {
   path: string
   label: string
@@ -46,12 +45,6 @@ export const hrNavigation: NavigationItem[] = [
     path: '/hr/divisions',
     label: 'Divisi',
     icon: 'grid',
-    permission: 'HR_ORGANIZATION_MANAGE',
-  },
-  {
-    path: '/hr/positions',
-    label: 'Posisi',
-    icon: 'user',
     permission: 'HR_ORGANIZATION_MANAGE',
   },
   {

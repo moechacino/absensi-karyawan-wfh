@@ -1,10 +1,9 @@
-import type { components } from '../../shared/api/schema'
+import type { PasswordInput, PasswordPolicy } from '../../shared/api/types'
 import type { ApiError } from '../../shared/api/problem'
-import type { JsonBody } from '../../shared/api/types'
 
-export type PasswordInput = JsonBody<'changeOwnPassword'>
+export type { PasswordInput, PasswordPolicy } from '../../shared/api/types'
+
 export type PasswordErrors = Partial<Record<keyof PasswordInput, string>>
-export type PasswordPolicy = components['schemas']['PasswordPolicy']
 
 export function validPasswordPolicy(value: unknown): value is PasswordPolicy {
   if (!value || typeof value !== 'object') return false

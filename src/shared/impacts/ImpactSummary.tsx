@@ -1,10 +1,10 @@
-import type { components } from '../api/schema'
+import type { ChangeImpact } from '../api/types'
 import { Alert } from '../ui/Feedback'
 
 export function ImpactSummary({
   impact,
 }: {
-  impact: components['schemas']['ChangeImpact']
+  impact: ChangeImpact
 }) {
   return (
     <div className="space-y-3">

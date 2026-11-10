@@ -1,8 +1,7 @@
+import type { Holiday, HolidayChange, HolidayChanged } from '../../shared/api/types'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useApi, useSession } from '../../shared/auth'
-import type { components } from '../../shared/api/schema'
-import type { JsonBody, JsonResult } from '../../shared/api/types'
 import { usePreview } from '../../shared/preview/usePreview'
 import { useCommand } from '../../shared/commands/useCommand'
 import { invalidateGroup } from '../../shared/query/invalidation'
@@ -58,14 +57,14 @@ export function HolidayEditor({
   const signature = JSON.stringify(changes)
   const preview = usePreview({
     identity: profile?.id ?? null,
-    execute: (input: JsonBody<'previewHolidayChange'>, signal) =>
+    execute: (input: HolidayChange, signal) =>
       previewHolidayChange(api, input, signal),
   })
   const invalidatePreview = preview.invalidate
   const currentPreview = preview.result
   const command = useCommand<
-    JsonBody<'changeHolidayCalendar'>,
-    JsonResult<'changeHolidayCalendar'>
+    HolidayChange,
+    HolidayChanged
   >({
     identity: profile?.id ?? null,
     execute: (input, context) =>
@@ -175,7 +174,7 @@ export function HolidayEditor({
       status !== 'conflict',
   )
 
-  function saveInput(value: components['schemas']['Holiday']) {
+  function saveInput(value: Holiday) {
     setSavedCalendar(null)
     setBatch((current) => ({
       ...current,
@@ -211,7 +210,7 @@ export function HolidayEditor({
   }
   function apply() {
     if (!allowed) return
-    const input: JsonBody<'changeHolidayCalendar'> = {
+    const input: HolidayChange = {
       ...changes,
     }
     void command.run(input)
@@ -219,6 +218,11 @@ export function HolidayEditor({
 
   return (
     <div className="space-y-5">
+      <p className="text-small text-text-muted">
+        Pilih tanggal pada kalender, isi nama hari libur, lalu simpan tanggal.
+        Setelah semua tanggal siap, pilih Tinjau perubahan kalender dan Simpan kalender
+        untuk menyimpannya ke server. Tanggal yang sudah berlalu tidak dapat diubah.
+      </p>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-small text-text-muted">

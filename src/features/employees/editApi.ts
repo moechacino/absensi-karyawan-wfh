@@ -1,20 +1,16 @@
+import type { Employee, EmployeePatch, RoleChange } from '../../shared/api/types'
 import type { ApiClient } from '../../shared/api/client'
-import type {
-  JsonBody,
-  JsonResult,
-  MultipartBody,
-} from '../../shared/api/types'
 import { toFormData } from '../../shared/api/multipart'
 
 export function employeeEditApi(api: ApiClient) {
   return {
     profile: (
       id: string,
-      body: MultipartBody<'updateEmployee'>,
+      body: EmployeePatch,
       key: string,
       signal?: AbortSignal,
     ) =>
-      api.request<JsonResult<'updateEmployee'>>({
+      api.request<Employee>({
         path: `/hr/employees/${encodeURIComponent(id)}`,
         method: 'PATCH',
         data: toFormData(body),
@@ -23,10 +19,10 @@ export function employeeEditApi(api: ApiClient) {
       }),
     role: (
       id: string,
-      body: JsonBody<'changeEmployeeRole'>,
+      body: RoleChange,
       signal?: AbortSignal,
     ) =>
-      api.request<JsonResult<'changeEmployeeRole'>>({
+      api.request<Employee>({
         path: `/hr/employees/${encodeURIComponent(id)}/role`,
         method: 'PUT',
         data: body,

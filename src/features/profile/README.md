@@ -14,8 +14,10 @@ Unknown policy blocks submission and offers an explicit profile/policy reload.
 Password values stay in mounted component/command memory, never Query or storage.
 The non-idempotent command makes one POST /auth/password with automatic retries
 disabled, maps stable Problem field errors and protects against duplicate clicks.
-A server-confirmed response clears fields and the session, then navigates to a
-fixed login success notice. An uncertain result blocks resubmission and offers
+A server-confirmed response clears password fields, keeps the session active,
+shows an inline success message and refreshes the profile (including
+hasPasswordChanged). A profile refresh failure offers a read-only retry and never
+replays the password write or logs the user out. An uncertain result blocks resubmission and offers
 an explicit login with the new password to inspect the result. Leaving unmounts
 and clears the local fields/command snapshot.
 

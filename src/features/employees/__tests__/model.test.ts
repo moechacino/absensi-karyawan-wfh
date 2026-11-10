@@ -36,7 +36,7 @@ describe('employee payload and recovery', () => {
     expect(creationPayload(draft, false)).toEqual(draft)
     expect(() => creationPayload({ ...draft, role: 'HRD' }, false)).toThrow()
     expect(creationPayload({ ...draft, role: 'HRD' }, true)).toMatchObject({
-      confirmHrAccess: true,
+      confirmHrAccess: 'true',
     })
     expect(creationPayload(draft, false)).not.toHaveProperty('password')
     expect(creationPayload(draft, false)).not.toHaveProperty('id')

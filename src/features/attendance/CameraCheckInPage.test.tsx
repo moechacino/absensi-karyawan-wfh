@@ -1,7 +1,7 @@
+import type { Home } from '../../shared/api/types'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { components } from '../../shared/api/schema'
 import { createApiError } from '../../shared/api/problem'
 import CameraCheckInPage from './CameraCheckInPage'
 const mocks = vi.hoisted(() => ({
@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => ({
   refetch: vi.fn(),
   invalidate: vi.fn(),
   stop: vi.fn(),
+  home: null as Home | null,
 }))
 vi.mock('../../shared/auth', () => ({
   useApi: () => ({ request: mocks.request }),
@@ -23,7 +24,7 @@ vi.mock('../home/api', () => ({
   useHome: () => ({
     isPending: false,
     isError: false,
-    data: home,
+    data: mocks.home ?? home,
     refetch: mocks.refetch,
   }),
 }))
@@ -37,7 +38,7 @@ vi.mock('./useCamera', () => ({
     capture: mocks.capture,
   }),
 }))
-const home: components['schemas']['Home'] = {
+const home: Home = {
   serverNow: '2026-11-08T02:00:00Z',
   companyDate: '2026-11-08',
   timeZone: 'Asia/Jakarta',
@@ -60,9 +61,22 @@ const home: components['schemas']['Home'] = {
 }
 describe('capture automatically submits', () => {
   beforeEach(() => {
+    mocks.home = null
     mocks.refetch.mockResolvedValue({ data: home, isError: false })
     mocks.capture.mockResolvedValue(new Blob(['fresh'], { type: 'image/jpeg' }))
     mocks.invalidate.mockResolvedValue(undefined)
+  })
+  it('keeps capture disabled before the server opening regardless of the device clock', () => {
+    mocks.home = {
+      ...home,
+      day: { ...home.day, canCheckIn: false, blockReason: 'CHECK_IN_TOO_EARLY' },
+      checkInWindow: { opensAt: '2026-11-10T12:45:00Z', deadlineAt: '2026-11-10T13:00:00Z', closesAt: '2026-11-10T21:00:00Z' },
+    }
+    render(<MemoryRouter><CameraCheckInPage /></MemoryRouter>)
+    expect(screen.getByRole('button', { name: 'Ambil foto dan check-in' })).toBeDisabled()
+    expect(screen.getByText('Waktu check-in belum dibuka.')).toBeInTheDocument()
+    expect(mocks.capture).not.toHaveBeenCalled()
+    expect(mocks.request).not.toHaveBeenCalled()
   })
   it('does not double-submit and deliberately retries identical photo/context/key after uncertainty', async () => {
     let reject!: (error: unknown) => void

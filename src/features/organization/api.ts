@@ -1,27 +1,36 @@
+import type {
+  Division,
+  DivisionCreate,
+  DivisionPage,
+  DivisionPatch,
+  Position,
+  PositionCreate,
+  PositionPage,
+  PositionPatch,
+} from '../../shared/api/types'
 import type { ApiClient } from '../../shared/api/client'
-import type { JsonBody, JsonResult } from '../../shared/api/types'
 import type { MasterFilters, MasterKind } from './model'
 
 export function organizationApi(api: ApiClient) {
   return {
     divisions: (filters: MasterFilters, signal?: AbortSignal) =>
-      api.request<JsonResult<'listDivisions'>>({
+      api.request<DivisionPage>({
         path: '/hr/divisions',
         params: { ...filters, divisionId: undefined },
         signal,
       }),
     positions: (filters: MasterFilters, signal?: AbortSignal) =>
-      api.request<JsonResult<'listPositions'>>({
+      api.request<PositionPage>({
         path: '/hr/positions',
         params: filters,
         signal,
       }),
     createDivision: (
-      data: JsonBody<'createDivision'>,
+      data: DivisionCreate,
       key: string,
       signal?: AbortSignal,
     ) =>
-      api.request<JsonResult<'createDivision'>>({
+      api.request<Division>({
         path: '/hr/divisions',
         method: 'POST',
         data,
@@ -29,11 +38,11 @@ export function organizationApi(api: ApiClient) {
         signal,
       }),
     createPosition: (
-      data: JsonBody<'createPosition'>,
+      data: PositionCreate,
       key: string,
       signal?: AbortSignal,
     ) =>
-      api.request<JsonResult<'createPosition'>>({
+      api.request<Position>({
         path: '/hr/positions',
         method: 'POST',
         data,
@@ -42,10 +51,10 @@ export function organizationApi(api: ApiClient) {
       }),
     updateDivision: (
       id: string,
-      data: JsonBody<'updateDivision'>,
+      data: DivisionPatch,
       signal?: AbortSignal,
     ) =>
-      api.request<JsonResult<'updateDivision'>>({
+      api.request<Division>({
         path: `/hr/divisions/${encodeURIComponent(id)}`,
         method: 'PATCH',
         data,
@@ -53,10 +62,10 @@ export function organizationApi(api: ApiClient) {
       }),
     updatePosition: (
       id: string,
-      data: JsonBody<'updatePosition'>,
+      data: PositionPatch,
       signal?: AbortSignal,
     ) =>
-      api.request<JsonResult<'updatePosition'>>({
+      api.request<Position>({
         path: `/hr/positions/${encodeURIComponent(id)}`,
         method: 'PATCH',
         data,

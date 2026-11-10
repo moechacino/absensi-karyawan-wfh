@@ -1,3 +1,4 @@
+import { CheckoutSummary } from '../attendance/CheckoutSummary'
 import { Link, useSearchParams } from 'react-router'
 import { useApi, useSession } from '../../shared/auth'
 import { useHome } from '../home/api'
@@ -50,7 +51,7 @@ export default function MonitoringPage() {
       </div>
       <Alert title="Absensi hanya dapat dilihat">
         Waktu dan bukti foto tidak dapat diedit. Indikator terlambat dapat
-        termasuk dalam sedang bekerja atau selesai.
+        termasuk dalam sedang bekerja, selesai, atau tidak check-out.
       </Alert>
       <section
         className="grid gap-4 rounded-panel border border-border bg-surface p-5 sm:grid-cols-2 xl:grid-cols-4"
@@ -189,6 +190,7 @@ export default function MonitoringPage() {
                 render: (row) => (
                   <>
                     <Badge>{monitoringRowView(row).status}</Badge>
+                    {row.day.attendance && <CheckoutSummary attendance={row.day.attendance} />}
                     {monitoringRowView(row).punctuality === 'LATE' && (
                       <p className="mt-2 text-small text-warning">
                         Terlambat{' '}

@@ -1,12 +1,12 @@
+import type { PasswordInput } from '../../shared/api/types'
 import type { ApiClient } from '../../shared/api/client'
-import type { JsonBody, JsonResult } from '../../shared/api/types'
 
 export function changePassword(
   api: ApiClient,
-  data: JsonBody<'changeOwnPassword'>,
+  data: PasswordInput,
   signal?: AbortSignal,
 ) {
-  return api.request<JsonResult<'changeOwnPassword'>>({
+  return api.request<undefined>({
     path: '/auth/password',
     method: 'POST',
     data,

@@ -76,6 +76,10 @@ function EmployeeEditor({ initial }: { initial: Employee }) {
     ) =>
       employeeEditApi(api).profile(base.id, body, idempotencyKey ?? '', signal),
     onConfirmed: async (result) => {
+      if (session.profile?.id === result.id && result.status !== 'ACTIVE') {
+        session.clearSession()
+        return
+      }
       setBase(result)
       setDraft(employeeDraft(result))
       setPhoto(null)
@@ -90,8 +94,7 @@ function EmployeeEditor({ initial }: { initial: Employee }) {
       if (session.profile)
         await invalidateGroup(cache, session.profile.id, 'employees')
       if (session.profile?.id === result.id) {
-        if (result.status !== 'ACTIVE') session.clearSession()
-        else await session.refreshProfile()
+        await session.refreshProfile()
       }
     },
   })
@@ -99,10 +102,11 @@ function EmployeeEditor({ initial }: { initial: Employee }) {
     const latest = await latestQuery.refetch()
     if (!latest.data) return
     setBase(latest.data)
+    setDraft((current) => ({ ...current, role: latest.data.role }))
     setReviewedVersion(latest.data.version)
     command.reset()
     setNotice(
-      `Versi ${latest.data.version} dimuat. Isian lokal dipertahankan; bandingkan data server sebelum menyimpan ulang.`,
+      `Versi ${latest.data.version} dimuat. Data server: ${latest.data.fullName}, ${latest.data.email}, ${latest.data.division.name} / ${latest.data.position.name}, ${latest.data.status}. Isian lokal dipertahankan; tinjau sebelum menyimpan ulang.`,
     )
   }
   function change(patch: Partial<EmployeeDraft>) {
@@ -126,7 +130,7 @@ function EmployeeEditor({ initial }: { initial: Employee }) {
     const nextErrors = validateEmployee(draft)
     if (draft.role !== base.role) nextErrors.role = 'Peran disimpan terpisah.'
     setErrors(nextErrors)
-    if (Object.keys(nextErrors).length || !dirty) return
+    if (Object.keys(nextErrors).length || !dirty || validatePhoto(photo)) return
     if (reviewedVersion !== base.version) {
       setNotice('Tinjau versi server terbaru sebelum menyimpan.')
       return
@@ -223,7 +227,10 @@ function EmployeeEditor({ initial }: { initial: Employee }) {
         </Link>
         <Button
           busy={command.status === 'submitting'}
-          disabled={!dirty || locked || reviewedVersion !== base.version}
+          disabled={
+            !dirty || locked || command.status === 'conflict' ||
+            Boolean(validatePhoto(photo)) || reviewedVersion !== base.version
+          }
           onClick={save}
         >
           Simpan profil

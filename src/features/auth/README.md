@@ -30,9 +30,9 @@ even when the revocation request fails. No automatic refresh or write replay
 exists. Browser storage removal can itself fail; that is shown as a controlled
 storage error rather than a claim that browser persistence was erased.
 
-`refreshProfile()` supports explicit profile/policy reload. `clearSession()` is
-used after confirmed password change or deliberate recovery from an uncertain
-change. Login only honors validated active internal return routes. Fixed query
+`refreshProfile()` supports explicit profile/policy reload and refreshes the
+warning flag after a confirmed password change while keeping the current session.
+`clearSession()` is used for deliberate recovery from an uncertain change. Login only honors validated active internal return routes. Fixed query
 messages `password-changed` and `password-uncertain` contain no password/token.
 
 Unit tests replace Axios transport, clock, storage, auth hooks and navigation;

@@ -38,6 +38,7 @@ function failureStatus(error: ApiError): CommandStatus {
       'REVIEW_STALE',
       'IDEMPOTENCY_KEY_REUSED',
       'INITIAL_CREDENTIALS_UNAVAILABLE',
+      'MISSED_CHECK_OUT',
     ].includes(code)
   )
     return 'conflict'

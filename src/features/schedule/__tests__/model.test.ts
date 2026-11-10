@@ -20,6 +20,7 @@ const input: ScheduleInput = {
   endDayOffset: 0,
   timeZone: 'Asia/Jakarta',
   effectiveFrom: '2026-11-16',
+  opensMinutesBeforeStart: 15,
 }
 function preview(): SchedulePreview {
   return {
@@ -71,6 +72,7 @@ describe('schedule configuration', () => {
       { ...input, expectedVersion: 3 },
       { ...input, timeZone: 'Asia/Makassar' },
       { ...input, workingDays: [1] },
+      { ...input, opensMinutesBeforeStart: 60 },
     ])
       expect(canApplySchedule(changed, result)).toBe(false)
     expect(
@@ -106,7 +108,15 @@ describe('schedule configuration', () => {
       workingDays: [],
       timeZone: '',
       effectiveFrom: '',
+      opensMinutesBeforeStart: 15,
     })
+  })
+
+  it('accepts only integer early allowances from 0 through 1440 minutes', () => {
+    for (const opensMinutesBeforeStart of [0, 15, 1440])
+      expect(validateSchedule({ ...input, opensMinutesBeforeStart })).toEqual({})
+    for (const opensMinutesBeforeStart of [-1, 1441, 0.5, NaN, Infinity])
+      expect(validateSchedule({ ...input, opensMinutesBeforeStart }).opensMinutesBeforeStart).toBeDefined()
   })
 
   it('sends timezone search date and immutable save input/key through Axios service functions', async () => {

@@ -1,9 +1,11 @@
+import { createApiClient } from '../../../shared/api/client'
+import type { AxiosAdapter } from 'axios'
+import type { ChangeImpact, HolidayCalendar } from '../../../shared/api/types'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createApiError } from '../../../shared/api/problem'
-import type { components } from '../../../shared/api/schema'
 import HrHolidayCalendarPage from '../HrHolidayCalendarPage'
 
 const mocks = vi.hoisted(() => ({
@@ -38,14 +40,14 @@ vi.mock('../../../shared/query/invalidation', () => ({
   invalidateGroup: (...args: unknown[]) => mocks.invalidate(...args),
 }))
 
-const calendar = (year: number): components['schemas']['HolidayCalendar'] => ({
+const calendar = (year: number): HolidayCalendar => ({
   year,
   version: 7,
   items: [
     { date: `${year}-11-12`, name: 'Hari Perusahaan', category: 'COMPANY' },
   ],
 })
-const impact: components['schemas']['ChangeImpact'] = {
+const impact: ChangeImpact = {
   canApply: true,
   issues: [],
 }
@@ -71,6 +73,9 @@ async function addHoliday(name: string, dateLabel = /Tandai 20 November/) {
   )
   await waitFor(() =>
     expect(screen.getByText(/Batch belum disimpan/)).toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(screen.queryByRole('dialog', { name: /^(Edit|Tandai) hari libur$/ })).not.toBeInTheDocument(),
   )
 }
 function mockDialogs() {
@@ -220,6 +225,55 @@ describe('HR yearly holiday editor', () => {
     expect(mocks.change).toHaveBeenCalledTimes(2)
     expect(mocks.change.mock.calls[1][1]).toEqual(mocks.change.mock.calls[0][1])
     expect(mocks.change.mock.calls[1][2]).toBe(mocks.change.mock.calls[0][2])
+  })
+
+  it('discards unsaved date input when the date dialog is closed', async () => {
+    setup()
+    fireEvent.click(await screen.findByRole('button', { name: /Tandai 20 November/ }))
+    fireEvent.change(screen.getByLabelText('Nama hari libur'), { target: { value: 'Belum disimpan' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Tutup' }))
+    expect(screen.queryByText(/Batch belum disimpan/)).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Tinjau perubahan kalender' })).toBeDisabled()
+    fireEvent.click(screen.getByRole('button', { name: /Tandai 20 November/ }))
+    expect(screen.getByLabelText('Nama hari libur')).toHaveValue('')
+    expect(mocks.preview).not.toHaveBeenCalled()
+    expect(mocks.change).not.toHaveBeenCalled()
+  })
+
+  it('loads, previews, and saves through the real Axios feature services', async () => {
+    const changes = { year: 2026, expectedVersion: 7, upsert: [{ date: '2026-11-20', name: 'Hari bersama', category: 'COMPANY' }], remove: [] }
+    const adapter = vi.fn<AxiosAdapter>(async (config) => {
+      const path = new URL(config.url!).pathname
+      const data = path === '/api/v1/holidays' ? calendar(2026)
+        : path === '/api/v1/hr/holidays/preview' ? impact
+        : path === '/api/v1/hr/holidays/changes'
+          ? { calendar: { ...calendar(2026), version: 8, items: [...calendar(2026).items, ...changes.upsert] } }
+          : null
+      if (!data) throw new Error(`Unexpected API path: ${path}`)
+      return { data, status: 200, statusText: 'OK', headers: {}, config }
+    })
+    Object.assign(mocks.api, createApiClient({ baseUrl: '/api/v1', appOrigin: 'http://localhost:5173', getAccessToken: () => 'test-token', adapter }))
+    const companyApi = await vi.importActual<typeof import('../../company/api')>('../../company/api')
+    const holidayApi = await vi.importActual<typeof import('../api')>('../api')
+    mocks.getCalendar.mockImplementation(companyApi.getHolidayCalendar)
+    mocks.preview.mockImplementation(holidayApi.previewHolidayChange)
+    mocks.change.mockImplementation(holidayApi.changeHolidayCalendar)
+    setup()
+    await addHoliday('Hari bersama')
+    fireEvent.click(screen.getByRole('button', { name: 'Tinjau perubahan kalender' }))
+    await screen.findByRole('dialog', { name: 'Tinjau perubahan hari libur 2026' })
+    fireEvent.click(screen.getByRole('button', { name: 'Simpan kalender' }))
+    await screen.findByText('Perubahan tahun 2026 telah dikonfirmasi oleh server.')
+    const requests = adapter.mock.calls.map(([config]) => config)
+    expect(requests.map((config) => [config.method, new URL(config.url!).pathname])).toEqual([
+      ['get', '/api/v1/holidays'], ['post', '/api/v1/hr/holidays/preview'], ['post', '/api/v1/hr/holidays/changes'],
+    ])
+    expect(requests[0].params).toEqual({ year: 2026 })
+    expect(JSON.parse(requests[1].data)).toEqual(changes)
+    expect(JSON.parse(requests[2].data)).toEqual(changes)
+    expect(requests[2].headers.get('Idempotency-Key')).toEqual(expect.any(String))
+    expect(requests[2].headers.get('Authorization')).toBe('Bearer test-token')
+    expect(requests[2].headers.get('Content-Type')).toContain('application/json')
   })
 
   it('keeps past dates read-only and requires a nonblank name before preview', async () => {

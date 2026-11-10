@@ -1,14 +1,16 @@
+import type { EmployeeCreate, EmployeeCreated } from '../../shared/api/types'
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useApi, useSession } from '../../shared/auth'
 import { useCommand } from '../../shared/commands/useCommand'
-import type { JsonBody, JsonResult } from '../../shared/api/types'
 import { Button } from '../../shared/ui/Button'
 import { Alert } from '../../shared/ui/Feedback'
 import { ConfirmationDialog } from '../../shared/ui/Dialog'
 import { CommandFeedback } from '../organization/CommandFeedback'
 import { EmployeeFields } from './EmployeeFields'
+import { EmployeePhotoField } from './EmployeePhotoField'
+import { validatePhoto } from './editModel'
 import { InitialCredentialsPanel } from './InitialCredentialsPanel'
 import { employeesApi } from './api'
 import {
@@ -37,20 +39,22 @@ function CreateEmployeeForm() {
   const listSuffix = search.size ? `?${search}` : ''
   const [draft, setDraft] = useState(employeeDraft)
   const [errors, setErrors] = useState<EmployeeErrors>({})
+  const [photo, setPhoto] = useState<File | null>(null)
   const [confirmHr, setConfirmHr] = useState(false)
   const [receipt, setReceipt] = useState<{
     employee: Employee
     initialCredentials: Credentials | null
   } | null>(null)
   const command = useCommand<
-    JsonBody<'createEmployee'>,
-    JsonResult<'createEmployee'>
+    EmployeeCreate,
+    EmployeeCreated
   >({
     identity: profile?.id ?? null,
     execute: (input, context) =>
       employeesApi(api).create(input, context.idempotencyKey!, context.signal),
     onConfirmed: async (result) => {
       setReceipt(result)
+      setPhoto(null)
       await queryClient.invalidateQueries({
         queryKey: ['private', profile?.id, 'employees'],
       })
@@ -68,13 +72,13 @@ function CreateEmployeeForm() {
   function submit(confirmed: boolean) {
     const validation = validateEmployee(draft)
     setErrors(validation)
-    if (Object.keys(validation).length) return
+    if (Object.keys(validation).length || validatePhoto(photo)) return
     if (draft.role === 'HRD' && !confirmed) {
       setConfirmHr(true)
       return
     }
     setConfirmHr(false)
-    void command.run(creationPayload(draft, confirmed))
+    void command.run(creationPayload(draft, confirmed, photo))
   }
   if (receipt)
     return (
@@ -155,6 +159,15 @@ function CreateEmployeeForm() {
           onChange={update}
           errors={errors}
           disabled={locked}
+        />
+        <EmployeePhotoField
+          file={photo}
+          onChange={(file) => {
+            setPhoto(file)
+            command.reset()
+          }}
+          disabled={locked}
+          error={validatePhoto(photo)}
         />
         <CommandFeedback
           status={command.status}

@@ -1,15 +1,19 @@
-import type { components } from '../../shared/api/schema'
-import type { JsonBody } from '../../shared/api/types'
+import type {
+  Division,
+  DivisionCreate,
+  MasterSummary,
+  Pagination,
+  Position,
+  PositionCreate,
+} from '../../shared/api/types'
 
+export type { Division, Position, MasterSummary } from '../../shared/api/types'
 export type MasterKind = 'divisions' | 'positions'
-export type Division = components['schemas']['Division']
-export type Position = components['schemas']['Position']
 export type Master = Division | Position
 export type MasterPageResult = {
   items: Master[]
-  pagination: components['schemas']['Pagination']
+  pagination: Pagination
 }
-export type MasterSummary = components['schemas']['MasterSummary']
 export type MasterFilters = {
   q?: string
   status?: 'ACTIVE' | 'INACTIVE'
@@ -68,15 +72,15 @@ export function validateMaster(
 export function masterCreate(
   kind: 'divisions',
   draft: MasterDraft,
-): JsonBody<'createDivision'>
+): DivisionCreate
 export function masterCreate(
   kind: 'positions',
   draft: MasterDraft,
-): JsonBody<'createPosition'>
+): PositionCreate
 export function masterCreate(
   kind: MasterKind,
   draft: MasterDraft,
-): JsonBody<'createDivision'> | JsonBody<'createPosition'>
+): DivisionCreate | PositionCreate
 export function masterCreate(kind: MasterKind, draft: MasterDraft) {
   const common = { code: draft.code, name: draft.name, status: draft.status }
   return kind === 'divisions'

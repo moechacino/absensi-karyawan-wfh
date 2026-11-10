@@ -29,15 +29,13 @@ export function CommandNotice({
       }
     >
       <p>{error.problem?.detail ?? error.message}</p>
+      {error.problem?.code === 'MISSED_CHECK_OUT' && (
+        <p>Jendela check-in shift kerja berikutnya telah dibuka. Check-out tidak dapat dilakukan; waktu selesai dan durasi tetap kosong.</p>
+      )}
       {uncertain && (
         <p>
           Jangan mengambil foto atau membuat tindakan baru sampai hasil
           dipastikan.
-        </p>
-      )}
-      {error.requestId && (
-        <p className="mt-2 break-all text-label">
-          ID permintaan: {error.requestId}
         </p>
       )}
     </Alert>

@@ -1,6 +1,6 @@
+import type { AttendanceDay } from '../../shared/api/types'
 import { describe, expect, it, vi } from 'vitest'
 import type { ApiClient } from '../../shared/api/client'
-import type { components } from '../../shared/api/schema'
 import {
   monitoringFilters,
   monitoringQuerySettings,
@@ -16,7 +16,7 @@ const employee = {
   position: { id: 'p1', code: 'POS-1', name: 'Designer' },
   photo: null,
 }
-const projectedDay: components['schemas']['AttendanceDay'] = {
+const projectedDay: AttendanceDay = {
   workDate: '2026-11-08',
   status: 'HOLIDAY',
   schedule: null,
@@ -75,6 +75,7 @@ describe('read-only monitoring', () => {
 
   it('does not add the overlapping late counter into the exclusive status total', () => {
     const cards = summaryCards({
+      missedCheckOut: 2,
       notCheckedIn: 2,
       working: 3,
       completed: 4,
@@ -83,8 +84,14 @@ describe('read-only monitoring', () => {
       restDay: 1,
       unconfigured: 1,
     })
-    expect(cards.find((item) => item.label === 'Total hasil')?.value).toBe(12)
+    expect(cards.find((item) => item.label === 'Total hasil')?.value).toBe(14)
+    expect(cards.find((item) => item.label === 'Tidak check-out')?.value).toBe(2)
     expect(cards.find((item) => item.label === 'Terlambat')?.value).toBe(5)
+  })
+
+  it('accepts the missed-check-out filter and labels missed days', () => {
+    expect(monitoringFilters(new URLSearchParams('date=2026-11-10&status=MISSED_CHECK_OUT')).valid).toBe(true)
+    expect(monitoringRowView({ employee, day: { ...projectedDay, status: 'MISSED_CHECK_OUT' } }).status).toBe('Tidak check-out')
   })
 
   it('enables company focus/reconnect refresh and scopes each query to active filters and identity', () => {

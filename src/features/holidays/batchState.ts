@@ -1,8 +1,8 @@
-import type { components } from '../../shared/api/schema'
+import type { Holiday, HolidayCalendar } from '../../shared/api/types'
 import { isDateOnly } from '../../shared/dates/format'
 
-export type Holiday = components['schemas']['Holiday']
-export type HolidayCalendar = components['schemas']['HolidayCalendar']
+export type { Holiday, HolidayCalendar } from '../../shared/api/types'
+
 export type HolidayBatch = {
   year: number
   expectedVersion: number

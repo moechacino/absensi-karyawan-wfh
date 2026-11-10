@@ -17,7 +17,7 @@ export function formatDate(value: string): string {
 }
 export function formatTime(
   value: string | null,
-  timeZone: string,
+  timeZone = userTimeZone(),
   seconds = false,
 ): string {
   if (!value) return '—'
@@ -37,7 +37,7 @@ export function formatTime(
 }
 export function formatTimestamp(
   value: string | null,
-  timeZone: string,
+  timeZone = userTimeZone(),
 ): string {
   if (!value) return '—'
   const date = new Date(value)
@@ -51,6 +51,18 @@ export function formatTimestamp(
   } catch {
     return 'Zona waktu tidak valid'
   }
+}
+export function userTimeZone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone
+}
+
+/** An instant's calendar date in the user's device timezone. */
+export function formatLocalDate(value: string): string {
+  if (!Number.isFinite(Date.parse(value))) return 'Tanggal tidak valid'
+  return new Intl.DateTimeFormat('id-ID', {
+    dateStyle: 'long',
+    timeZone: userTimeZone(),
+  }).format(new Date(value))
 }
 export function formatDuration(seconds: number | null): string {
   if (seconds === null) return 'Sedang berlangsung'

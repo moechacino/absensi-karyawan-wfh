@@ -1,5 +1,5 @@
+import type { ScheduleVersion } from '../../shared/api/types'
 import { useState } from 'react'
-import type { components } from '../../shared/api/schema'
 import { Dialog } from '../../shared/ui/Dialog'
 import { Alert } from '../../shared/ui/Feedback'
 import type { ApiError } from '../../shared/api/problem'
@@ -22,7 +22,7 @@ export function ScheduleImpactDialog({
   onRetry,
 }: {
   preview: SchedulePreview
-  current: components['schemas']['ScheduleVersion'] | null
+  current: ScheduleVersion | null
   open: boolean
   busy: boolean
   allowed: boolean
@@ -86,6 +86,7 @@ export function ScheduleImpactDialog({
               .join(', ')}
           </p>
           <p>Berlaku mulai: {preview.schedule.effectiveFrom}</p>
+          <p>Check-in dibuka {preview.schedule.opensMinutesBeforeStart} menit sebelum jam mulai.</p>
           <p>Tanggal pembanding server: {preview.comparisonDate}</p>
           <p className="text-small">{activationLabel(preview)}</p>
         </section>

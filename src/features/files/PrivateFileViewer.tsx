@@ -67,7 +67,6 @@ function ViewerContent({
             : error.status === 503
               ? 'Penyimpanan sementara tidak tersedia. Coba muat ulang sesuai petunjuk server.'
               : 'Periksa koneksi dan coba muat ulang.'}
-          {error.requestId && <p>ID permintaan: {error.requestId}</p>}
           <RetryRead error={error} onRetry={retry} />
         </Alert>
       )}

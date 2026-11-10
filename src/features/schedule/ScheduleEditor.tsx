@@ -1,7 +1,7 @@
+import type { ScheduleChange, WorkSchedule } from '../../shared/api/types'
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router'
-import type { components } from '../../shared/api/schema'
 import { isApiError } from '../../shared/api/problem'
 import { useApi, useSession } from '../../shared/auth'
 import { useCommand } from '../../shared/commands/useCommand'
@@ -29,7 +29,7 @@ export function ScheduleEditor({
   model,
   refresh,
 }: {
-  model: components['schemas']['WorkSchedule']
+  model: WorkSchedule
   refresh: () => Promise<number | undefined>
 }) {
   const api = useApi(),
@@ -46,7 +46,7 @@ export function ScheduleEditor({
   })
   const command = useCommand({
     identity: profile?.id ?? null,
-    execute: async (input: components['schemas']['ScheduleWrite'], context) => {
+    execute: async (input: ScheduleChange, context) => {
       try {
         return await changeWorkSchedule(
           api,
@@ -192,6 +192,18 @@ export function ScheduleEditor({
               ]}
             />
             <TextField
+              label="Maksimal check-in lebih awal (menit)"
+              type="number"
+              min={0}
+              max={1440}
+              step={1}
+              value={Number.isNaN(draft.opensMinutesBeforeStart) ? '' : draft.opensMinutesBeforeStart}
+              onChange={(event) => change({ opensMinutesBeforeStart: event.target.valueAsNumber })}
+              error={attempted ? errors.opensMinutesBeforeStart : undefined}
+              hint="0–1440 menit sebelum jam mulai. Keterlambatan tetap dihitung segera setelah jam mulai."
+              required
+            />
+            <TextField
               label="Berlaku mulai"
               type="date"
               value={draft.effectiveFrom}
@@ -268,11 +280,6 @@ export function ScheduleEditor({
           tone="warning"
         >
           {command.error.problem?.detail ?? command.error.message}
-          {command.error.requestId && (
-            <p className="text-small">
-              ID permintaan: {command.error.requestId}
-            </p>
-          )}
           {['uncertain', 'in-progress'].includes(command.status) ? (
             <div className="mt-3 flex flex-wrap gap-3">
               <Button onClick={() => void command.retry()}>

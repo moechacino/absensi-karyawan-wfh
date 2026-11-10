@@ -11,7 +11,7 @@ export function EmployeePhotoField({
   disabled,
   error,
 }: {
-  employee: Employee
+  employee?: Employee
   file: File | null
   onChange: (file: File | null) => void
   disabled?: boolean
@@ -22,14 +22,16 @@ export function EmployeePhotoField({
     <section className="space-y-4 rounded-card border border-border p-4">
       <h2 className="text-title font-medium">Foto profil</h2>
       <div className="flex flex-wrap gap-5">
-        <div className="space-y-2">
-          <p className="text-label text-text-muted">Foto tersimpan</p>
-          <PrivateImage
-            file={employee.photo}
-            alt={employee.fullName}
-            className="size-24 rounded-card object-cover"
-          />
-        </div>
+        {employee && (
+          <div className="space-y-2">
+            <p className="text-label text-text-muted">Foto tersimpan</p>
+            <PrivateImage
+              file={employee.photo}
+              alt={employee.fullName}
+              className="size-24 rounded-card object-cover"
+            />
+          </div>
+        )}
         {file && (
           <div className="space-y-2">
             <p className="text-label text-text-muted">
@@ -38,7 +40,7 @@ export function EmployeePhotoField({
             {preview ? (
               <img
                 src={preview}
-                alt="Pratinjau foto pengganti"
+                alt="Pratinjau foto profil"
                 className="size-24 rounded-card object-cover"
               />
             ) : (
@@ -50,13 +52,13 @@ export function EmployeePhotoField({
         )}
       </div>
       <FileField
-        label="Foto pengganti (opsional)"
+        label={employee ? 'Foto pengganti (opsional)' : 'Foto profil (opsional)'}
         file={file}
         onChange={onChange}
         disabled={disabled}
         accept={PROFILE_PHOTO_TYPES.join(',')}
         error={error}
-        hint="Memilih atau menghapus pilihan lokal tidak mengubah foto tersimpan. JPEG, PNG, atau WebP; maksimum 5 MiB sesuai kontrak perencanaan."
+        hint="JPEG, PNG, atau WebP; maksimum 5 MiB. Foto dikirim bersama data karyawan saat disimpan. Menghapus pilihan lokal tidak menghapus foto tersimpan."
       />
     </section>
   )

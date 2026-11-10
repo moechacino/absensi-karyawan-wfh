@@ -1,8 +1,8 @@
+import type { Attendance } from '../../shared/api/types'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams, useSearchParams } from 'react-router'
 import { useApi, useSession } from '../../shared/auth'
 import type { ApiClient } from '../../shared/api/client'
-import type { components } from '../../shared/api/schema'
 import { useHome } from '../home/api'
 import { AttendanceRecord } from './AttendanceRecord'
 import { isRecordId } from './historyFilters'
@@ -19,7 +19,7 @@ export function AttendanceDetailScreen({
     api: ApiClient,
     id: string,
     signal?: AbortSignal,
-  ) => Promise<components['schemas']['Attendance']>
+  ) => Promise<Attendance>
   hr?: boolean
 }) {
   const api = useApi(),
@@ -70,6 +70,7 @@ export function AttendanceDetailScreen({
           {!hr &&
             query.data.state === 'WORKING' &&
             home.data?.day.canCheckOut &&
+            home.data.day.attendance?.state === 'WORKING' &&
             home.data.day.attendance?.id === query.data.id && (
               <>
                 <Button
